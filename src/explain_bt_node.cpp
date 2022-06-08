@@ -1,6 +1,7 @@
 #include <iostream>
 #include <fstream>
 #include <string>
+#include <boost/filesystem.hpp>
 #include "ros/ros.h"
 #include <behaviortree_cpp_v3/bt_factory.h>
 #include "explain_bt/Explain.h"
@@ -8,6 +9,7 @@
 #include "dummy_nodes.h"
 
 using namespace BT;
+using boost::filesystem::current_path;
 
 int main (int argc, char **argv)
 {
@@ -22,7 +24,8 @@ int main (int argc, char **argv)
    factory.registerSimpleAction("CloseGripper", 
                                  std::bind(&GripperInterface::close, &gripper));
    
-   auto tree = factory.createTreeFromFile("/root/catkin_ws/src/robot-explanation-BTs/src/my_tree.xml");
+   std::string cwd = get_current_dir_name();
+   auto tree = factory.createTreeFromFile(cwd + "/src/explain_bt/src/my_tree.xml");
    ROS_INFO("BT created from file.");
 
    ExplainableBT explainable_tree(tree);

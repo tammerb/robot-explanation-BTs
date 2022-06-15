@@ -12,10 +12,17 @@ find_package(catkin REQUIRED COMPONENTS
   message_generation
   std_msgs
   behaviortree_cpp_v3
+  moveit_core
+  moveit_ros_planning
+  moveit_ros_planning_interface
+  tf2_ros
+  tf2_eigen
+  tf2_geometry_msgs
 )
 
 ## System dependencies are found with CMake's conventions
 # find_package(Boost REQUIRED COMPONENTS system)
+find_package(Eigen3 REQUIRED)
 
 
 ## Uncomment this if the package has a setup.py. This macro ensures
@@ -104,9 +111,17 @@ generate_messages(
 ## DEPENDS: system dependencies of this project that dependent projects also need
 catkin_package(
   INCLUDE_DIRS include
-  LIBRARIES explain_bt
-  CATKIN_DEPENDS roscpp behaviortree_cpp_v3
-#  DEPENDS system_lib
+  LIBRARIES
+    explain_bt
+  CATKIN_DEPENDS
+    roscpp
+    behaviortree_cpp_v3
+    moveit_core
+    moveit_visual_tools
+    moveit_ros_planning_interface
+    tf2_geometry_msgs
+  DEPENDS
+    EIGEN3
 )
 
 ###########
@@ -115,10 +130,8 @@ catkin_package(
 
 ## Specify additional locations of header files
 ## Your package locations should be listed before other locations
-include_directories(
-  include
-  ${catkin_INCLUDE_DIRS}
-)
+
+include_directories(include SYSTEM ${catkin_INCLUDE_DIRS} ${Boost_INCLUDE_DIR} ${EIGEN3_INCLUDE_DIRS})
 
 ## Declare a C++ library
 #add_library(dummy_nodes STATIC
@@ -133,7 +146,10 @@ include_directories(
 ## Declare a C++ executable
 ## With catkin_make all packages are built within a single CMake context
 ## The recommended prefix ensures that target names across packages don't collide
-add_executable(${PROJECT_NAME}_node src/countdown.cpp src/dummy_nodes.cpp src/${PROJECT_NAME}_node.cpp)
+#add_executable(${PROJECT_NAME}_node src/countdown.cpp src/dummy_nodes.cpp src/${PROJECT_NAME}_node.cpp)
+
+add_executable(${PROJECT_NAME}_node src/countdown.cpp src/ur5e_nodes.cpp src/${PROJECT_NAME}_node.cpp)
+
 #add_executable(hello_BT src/hello_BT.cpp)
 
 

@@ -16,15 +16,16 @@ int main (int argc, char **argv)
    BehaviorTreeFactory factory;
 
    using namespace UR5eNodes;
-   factory.registerNodeType<ApproachObject>("ApproachObject");
+   factory.registerNodeType<GoHome>("GoHome");
+   factory.registerNodeType<GoVertical>("GoVertical");
    GripperInterface gripper;
-   factory.registerSimpleAction("OpenURGripper", 
+   factory.registerSimpleAction("OpenGripper", 
                                  std::bind(&GripperInterface::open, &gripper));
    factory.registerSimpleAction("CloseGripper", 
                                  std::bind(&GripperInterface::close, &gripper));
    
    std::string cwd = get_current_dir_name();
-   auto tree = factory.createTreeFromFile(cwd + "/src/explain_bt/src/my_UR_tree.xml");
+   auto tree = factory.createTreeFromFile(cwd + "/src/explain_bt/src/test_tree.xml");
    ROS_INFO("BT created from file.");
 
    ExplainableBT explainable_tree(tree);

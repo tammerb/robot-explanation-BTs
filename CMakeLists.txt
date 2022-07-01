@@ -148,7 +148,8 @@ include_directories(include SYSTEM ${catkin_INCLUDE_DIRS} ${Boost_INCLUDE_DIR} $
 ## The recommended prefix ensures that target names across packages don't collide
 #add_executable(${PROJECT_NAME}_node src/countdown.cpp src/dummy_nodes.cpp src/${PROJECT_NAME}_node.cpp)
 
-add_executable(${PROJECT_NAME}_node src/countdown.cpp src/ur5e_nodes.cpp src/${PROJECT_NAME}_node.cpp)
+# add_executable(${PROJECT_NAME} src/countdown.cpp src/ur5e_nodes.cpp src/${PROJECT_NAME}.cpp)
+add_executable(${PROJECT_NAME}_test src/countdown.cpp src/ur5e_nodes.cpp src/${PROJECT_NAME}_test.cpp)
 
 #add_executable(hello_BT src/hello_BT.cpp)
 
@@ -161,11 +162,13 @@ add_executable(${PROJECT_NAME}_node src/countdown.cpp src/ur5e_nodes.cpp src/${P
 
 ## Add cmake target dependencies of the executable
 ## same as for the library above
-add_dependencies(${PROJECT_NAME}_node ${${PROJECT_NAME}_node_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
+add_dependencies(${PROJECT_NAME}_test ${${PROJECT_NAME}_test_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
+# add_dependencies(${PROJECT_NAME}_node ${${PROJECT_NAME}_node_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
+
 #add_dependencies(hello_BT ${hello_BT_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
 
 ## Specify libraries to link a library or executable target against
-target_link_libraries(${PROJECT_NAME}_node
+target_link_libraries(${PROJECT_NAME}_test
    ${catkin_LIBRARIES}
 )
 

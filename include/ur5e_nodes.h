@@ -7,6 +7,8 @@
 namespace UR5eNodes
 {
 
+// BT::NodeStatus ConditionNode();
+
 class GripperInterface
 {
   public:
@@ -22,14 +24,10 @@ class GripperInterface
     bool _opened;
 };
 
-//--------------------------------------
-
-// Example of custom SyncActionNode (synchronous action)
-// without ports.
-class ApproachObject : public BT::SyncActionNode
+class GoHome : public BT::SyncActionNode
 {
   public:
-    ApproachObject(const std::string& name) :
+    GoHome(const std::string& name) :
         BT::SyncActionNode(name, {})
     {
     }
@@ -38,39 +36,27 @@ class ApproachObject : public BT::SyncActionNode
     BT::NodeStatus tick() override;
 };
 
-// Example of custom SyncActionNode (synchronous action)
-// with an input port.
-class SaySomething : public BT::SyncActionNode
+class GoVertical : public BT::SyncActionNode
 {
   public:
-    SaySomething(const std::string& name, const BT::NodeConfiguration& config)
-      : BT::SyncActionNode(name, config)
+    GoVertical(const std::string& name) :
+        BT::SyncActionNode(name, {})
     {
     }
 
     // You must override the virtual function tick()
     BT::NodeStatus tick() override;
-
-    // It is mandatory to define this static method.
-    static BT::PortsList providedPorts()
-    {
-        return{ BT::InputPort<std::string>("message") };
-    }
 };
-
-//Same as class SaySomething, but to be registered with SimpleActionNode
-BT::NodeStatus SaySomethingSimple(BT::TreeNode& self);
-
 
 inline void RegisterNodes(BT::BehaviorTreeFactory& factory)
 {
     static GripperInterface grip_singleton;
 
-    factory.registerSimpleCondition("CheckBattery", std::bind(CheckBattery));
+//  factory.registerSimpleCondition("ConditionNode", std::bind(ConditionNode));
     factory.registerSimpleAction("OpenGripper", std::bind(&GripperInterface::open, &grip_singleton));
     factory.registerSimpleAction("CloseGripper", std::bind(&GripperInterface::close, &grip_singleton));
-    factory.registerNodeType<ApproachObject>("ApproachObject");
-    factory.registerNodeType<SaySomething>("SaySomething");
+    factory.registerNodeType<GoHome>("GoHome");
+    factory.registerNodeType<GoVertical>("GoVertical");
 }
 
 } // end namespace

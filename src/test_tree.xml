@@ -1,10 +1,11 @@
  <root main_tree_to_execute = "MainTree" >
      <BehaviorTree ID="MainTree">
-        <Sequence name="collect_object">
-            <CheckBattery   name="check_battery"/>
+        <Sequence name="basic_manipulation">
+            <GoHome   name="go_home"/>
+            <GoVertical     name="GoVertical"/>
             <OpenGripper    name="open_gripper"/>
-            <ApproachObject name="approach_object"/>
             <CloseGripper   name="close_gripper"/>
+            <GoHome   name="go_home"/>
         </Sequence>
      </BehaviorTree>
  </root>

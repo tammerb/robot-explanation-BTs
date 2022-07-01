@@ -1,6 +1,6 @@
  <root main_tree_to_execute = "MainTree" >
      <BehaviorTree ID="MainTree">
-        <Sequence name="basic_manipulation">
+        <Sequence name="do_basic_manipulation">
             <GoHome   name="go_home"/>
             <GoVertical     name="GoVertical"/>
             <OpenGripper    name="open_gripper"/>

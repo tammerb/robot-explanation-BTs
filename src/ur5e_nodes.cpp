@@ -14,32 +14,77 @@ namespace UR5eNodes
 
 BT::NodeStatus GripperInterface::open()
 {
-    _opened = true;
-    countdown(2);
     std::cout << "GripperInterface::open" << std::endl;
-    return BT::NodeStatus::SUCCESS;
+
+    static const std::string PLANNING_GROUP = "gripper";
+    moveit::planning_interface::MoveGroupInterface move_group_interface(PLANNING_GROUP);
+    const std::vector<std::string> named_targets = move_group_interface.getNamedTargets();
+    std::map<std::string, double> positions = move_group_interface.getNamedTargetValues(named_targets[0]);
+
+    move_group_interface.setJointValueTarget(positions);
+
+    if (move_group_interface.move() == 1){
+        _opened = true;
+        return BT::NodeStatus::SUCCESS;
+    } else {
+        return BT::NodeStatus::FAILURE;
+    }   
 }
 
 BT::NodeStatus GripperInterface::close()
 {
-    countdown(2);
     std::cout << "GripperInterface::close" << std::endl;
-    _opened = false;
-    return BT::NodeStatus::SUCCESS;
+
+    static const std::string PLANNING_GROUP = "gripper";
+    moveit::planning_interface::MoveGroupInterface move_group_interface(PLANNING_GROUP);
+    const std::vector<std::string> named_targets = move_group_interface.getNamedTargets();
+    std::map<std::string, double> positions = move_group_interface.getNamedTargetValues(named_targets[1]);
+
+    move_group_interface.setJointValueTarget(positions);
+
+    if (move_group_interface.move() == 1){
+        _opened = false;
+        return BT::NodeStatus::SUCCESS;
+    } else {
+        return BT::NodeStatus::FAILURE;
+    }
 }
 
 BT::NodeStatus GoHome::tick()
 {
-    countdown(2);
     std::cout << "GoHome: " << this->name() << std::endl;
-    return BT::NodeStatus::SUCCESS;
+
+    // setup the MoveGroupInterface
+    static const std::string PLANNING_GROUP = "manipulator";
+    moveit::planning_interface::MoveGroupInterface move_group_interface(PLANNING_GROUP);
+    const std::vector<std::string> named_targets = move_group_interface.getNamedTargets();
+    std::map<std::string, double> positions = move_group_interface.getNamedTargetValues(named_targets[0]);
+
+    move_group_interface.setJointValueTarget(positions);
+
+    if (move_group_interface.move() == 1){
+        return BT::NodeStatus::SUCCESS;
+    } else {
+        return BT::NodeStatus::FAILURE;
+    }    
 }
 
 BT::NodeStatus GoVertical::tick()
 {
-    countdown(2);
     std::cout << "GoVertical: " << this->name() << std::endl;
-    return BT::NodeStatus::SUCCESS;
+    // setup the MoveGroupInterface
+    static const std::string PLANNING_GROUP = "manipulator";
+    moveit::planning_interface::MoveGroupInterface move_group_interface(PLANNING_GROUP);
+    const std::vector<std::string> named_targets = move_group_interface.getNamedTargets();
+    std::map<std::string, double> positions = move_group_interface.getNamedTargetValues(named_targets[1]);
+
+    move_group_interface.setJointValueTarget(positions);
+
+    if (move_group_interface.move() == 1){
+        return BT::NodeStatus::SUCCESS;
+    } else {
+        return BT::NodeStatus::FAILURE;
+    }
 }
 
 }

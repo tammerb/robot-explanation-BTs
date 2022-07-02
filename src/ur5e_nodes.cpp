@@ -18,6 +18,9 @@ BT::NodeStatus GripperInterface::open()
 
     static const std::string PLANNING_GROUP = "gripper";
     moveit::planning_interface::MoveGroupInterface move_group_interface(PLANNING_GROUP);
+
+    move_group_interface.setMaxVelocityScalingFactor(1.0);
+    move_group_interface.setMaxAccelerationScalingFactor(1.0);
     const std::vector<std::string> named_targets = move_group_interface.getNamedTargets();
     std::map<std::string, double> positions = move_group_interface.getNamedTargetValues(named_targets[0]);
 
@@ -37,8 +40,33 @@ BT::NodeStatus GripperInterface::close()
 
     static const std::string PLANNING_GROUP = "gripper";
     moveit::planning_interface::MoveGroupInterface move_group_interface(PLANNING_GROUP);
+
+    move_group_interface.setMaxVelocityScalingFactor(1.0);
+    move_group_interface.setMaxAccelerationScalingFactor(1.0);
     const std::vector<std::string> named_targets = move_group_interface.getNamedTargets();
     std::map<std::string, double> positions = move_group_interface.getNamedTargetValues(named_targets[1]);
+
+    move_group_interface.setJointValueTarget(positions);
+
+    if (move_group_interface.move() == 1){
+        _opened = false;
+        return BT::NodeStatus::SUCCESS;
+    } else {
+        return BT::NodeStatus::FAILURE;
+    }
+}
+
+BT::NodeStatus GripperInterface::grip()
+{
+    std::cout << "GripperInterface::grip" << std::endl;
+
+    static const std::string PLANNING_GROUP = "gripper";
+    moveit::planning_interface::MoveGroupInterface move_group_interface(PLANNING_GROUP);
+
+    move_group_interface.setMaxVelocityScalingFactor(1.0);
+    move_group_interface.setMaxAccelerationScalingFactor(1.0);
+    const std::vector<std::string> named_targets = move_group_interface.getNamedTargets();
+    std::map<std::string, double> positions = move_group_interface.getNamedTargetValues(named_targets[2]);
 
     move_group_interface.setJointValueTarget(positions);
 
@@ -57,6 +85,9 @@ BT::NodeStatus GoHome::tick()
     // setup the MoveGroupInterface
     static const std::string PLANNING_GROUP = "manipulator";
     moveit::planning_interface::MoveGroupInterface move_group_interface(PLANNING_GROUP);
+
+    move_group_interface.setMaxVelocityScalingFactor(1.0);
+    move_group_interface.setMaxAccelerationScalingFactor(1.0);
     const std::vector<std::string> named_targets = move_group_interface.getNamedTargets();
     std::map<std::string, double> positions = move_group_interface.getNamedTargetValues(named_targets[0]);
 
@@ -75,12 +106,42 @@ BT::NodeStatus GoVertical::tick()
     // setup the MoveGroupInterface
     static const std::string PLANNING_GROUP = "manipulator";
     moveit::planning_interface::MoveGroupInterface move_group_interface(PLANNING_GROUP);
+
+    move_group_interface.setMaxVelocityScalingFactor(1.0);
+    move_group_interface.setMaxAccelerationScalingFactor(1.0);
     const std::vector<std::string> named_targets = move_group_interface.getNamedTargets();
     std::map<std::string, double> positions = move_group_interface.getNamedTargetValues(named_targets[1]);
 
     move_group_interface.setJointValueTarget(positions);
 
     if (move_group_interface.move() == 1){
+        return BT::NodeStatus::SUCCESS;
+    } else {
+        return BT::NodeStatus::FAILURE;
+    }
+}
+
+BT::NodeStatus MoveToPose::tick()
+{
+    std::cout << "MoveToPose: " << this->name() << std::endl;
+    // setup the MoveGroupInterface
+    static const std::string PLANNING_GROUP = "manipulator";
+    moveit::planning_interface::MoveGroupInterface move_group_interface(PLANNING_GROUP);
+
+    move_group_interface.setMaxVelocityScalingFactor(1.0);
+    move_group_interface.setMaxAccelerationScalingFactor(1.0);
+    ROS_INFO("Planning frame: %s", move_group_interface.getPlanningFrame().c_str());
+    ROS_INFO("End effector link: %s", move_group_interface.getEndEffectorLink().c_str());
+
+    geometry_msgs::PoseStamped current_pose = move_group_interface.getCurrentPose();
+    geometry_msgs::Pose target_pose = current_pose.pose;
+
+    target_pose.position.z = 0.1;
+
+    move_group_interface.setPoseTarget(target_pose);
+
+    bool debug = true;
+    if (move_group_interface.move() == 1 || debug){
         return BT::NodeStatus::SUCCESS;
     } else {
         return BT::NodeStatus::FAILURE;

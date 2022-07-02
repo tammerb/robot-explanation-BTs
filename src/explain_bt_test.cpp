@@ -18,12 +18,16 @@ int main (int argc, char **argv)
    using namespace UR5eNodes;
    factory.registerNodeType<GoHome>("GoHome");
    factory.registerNodeType<GoVertical>("GoVertical");
+   factory.registerNodeType<MoveToPose>("MoveToPose");
+
    GripperInterface gripper;
    factory.registerSimpleAction("OpenGripper", 
                                  std::bind(&GripperInterface::open, &gripper));
    factory.registerSimpleAction("CloseGripper", 
                                  std::bind(&GripperInterface::close, &gripper));
-   
+   factory.registerSimpleAction("GripGripper", 
+                                 std::bind(&GripperInterface::grip, &gripper));
+
    std::string cwd = get_current_dir_name();
    auto tree = factory.createTreeFromFile(cwd + "/src/explain_bt/src/test_tree.xml");
    ROS_INFO("BT created from file.");

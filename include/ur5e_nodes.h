@@ -20,6 +20,8 @@ class GripperInterface
 
     BT::NodeStatus close();
 
+    BT::NodeStatus grip();
+
   private:
     bool _opened;
 };
@@ -48,6 +50,18 @@ class GoVertical : public BT::SyncActionNode
     BT::NodeStatus tick() override;
 };
 
+class MoveToPose : public BT::SyncActionNode
+{
+  public:
+    MoveToPose(const std::string& name) :
+        BT::SyncActionNode(name, {})
+    {
+    }
+
+    // You must override the virtual function tick()
+    BT::NodeStatus tick() override;
+};
+
 inline void RegisterNodes(BT::BehaviorTreeFactory& factory)
 {
     static GripperInterface grip_singleton;
@@ -57,6 +71,8 @@ inline void RegisterNodes(BT::BehaviorTreeFactory& factory)
     factory.registerSimpleAction("CloseGripper", std::bind(&GripperInterface::close, &grip_singleton));
     factory.registerNodeType<GoHome>("GoHome");
     factory.registerNodeType<GoVertical>("GoVertical");
+    factory.registerNodeType<MoveToPose>("MoveToPose");
+
 }
 
 } // end namespace

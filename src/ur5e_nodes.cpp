@@ -141,7 +141,7 @@ BT::NodeStatus MoveToPose::tick()
     const double eef_step = 0.01;
     double fraction = move_group_interface.computeCartesianPath(waypoints, eef_step, jump_threshold, trajectory);
 
-    move_group_interface.execute(trajectory);
+    // move_group_interface.execute(trajectory);
 
     
 /*  move_group_interface.setMaxVelocityScalingFactor(1.0);
@@ -157,7 +157,7 @@ BT::NodeStatus MoveToPose::tick()
 
     move_group_interface.setPoseTarget(target_pose);
 */
-    bool debug = true;
+    bool debug = false;
     if (debug || move_group_interface.execute(trajectory) == 1){
         return BT::NodeStatus::SUCCESS;
     } else {
@@ -165,6 +165,72 @@ BT::NodeStatus MoveToPose::tick()
     }
 }
 
+BT::NodeStatus TranslateToPose::tick()
+{
+    std::cout << "TranslateToPose: " << this->name() << std::endl;
+    // setup the MoveGroupInterface
+    static const std::string PLANNING_GROUP = "manipulator";
+    moveit::planning_interface::MoveGroupInterface move_group_interface(PLANNING_GROUP);
+
+    std::vector<geometry_msgs::Pose> new_waypoints;
+
+    geometry_msgs::Pose current_pose_t = move_group_interface.getCurrentPose().pose;
+    new_waypoints.push_back(current_pose_t);
+    geometry_msgs::Pose target_pose2 = current_pose_t;
+    target_pose2.position.x -= 0.5;
+    target_pose2.position.y += 1.0;
+    target_pose2.position.z += 0.2;
+
+    new_waypoints.push_back(target_pose2);
+
+    moveit_msgs::RobotTrajectory trajectory2;
+    const double jump_threshold = 0.0;
+    const double eef_step = 0.01;
+    double fraction = move_group_interface.computeCartesianPath(new_waypoints, eef_step, jump_threshold, trajectory2);
+
+    bool debug = false;
+    if (debug || move_group_interface.execute(trajectory2) == 1){
+        return BT::NodeStatus::SUCCESS;
+    } else {
+        return BT::NodeStatus::FAILURE;
+    }
+}
+
+BT::NodeStatus BadMove::tick()
+{
+    std::cout << "BadMove: " << this->name() << std::endl;
+    // setup the MoveGroupInterface
+    static const std::string PLANNING_GROUP = "manipulator";
+    moveit::planning_interface::MoveGroupInterface move_group_interface(PLANNING_GROUP);
+
+    std::vector<geometry_msgs::Pose> new_waypoints;
+
+    geometry_msgs::Pose current_pose_t = move_group_interface.getCurrentPose().pose;
+    new_waypoints.push_back(current_pose_t);
+    geometry_msgs::Pose target_pose2 = current_pose_t;
+    target_pose2.position.x -= 50;
+    target_pose2.position.y += 1.0;
+    target_pose2.position.z += 50;
+
+    new_waypoints.push_back(target_pose2);
+
+    moveit_msgs::RobotTrajectory trajectory2;
+    const double jump_threshold = 0.0;
+    const double eef_step = 0.01;
+    double fraction = move_group_interface.computeCartesianPath(new_waypoints, eef_step, jump_threshold, trajectory2);
+
+    if (fraction < 1.0) {
+        return BT::NodeStatus::FAILURE;
+    }
+
+    bool debug = false;
+    if (debug || move_group_interface.execute(trajectory2) == 1){
+        return BT::NodeStatus::SUCCESS;
+    } else {
+        return BT::NodeStatus::FAILURE;
+    }
+}
+/*
 BT::NodeStatus Pick::tick()
 {
     std::cout << "Pick: " << this->name() << std::endl;
@@ -194,5 +260,5 @@ BT::NodeStatus Pick::tick()
         return BT::NodeStatus::FAILURE;
     }
 }
-
+*/
 }

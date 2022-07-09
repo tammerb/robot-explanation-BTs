@@ -19,6 +19,9 @@ int main (int argc, char **argv)
    factory.registerNodeType<GoHome>("GoHome");
    factory.registerNodeType<GoVertical>("GoVertical");
    factory.registerNodeType<MoveToPose>("MoveToPose");
+   factory.registerNodeType<TranslateToPose>("TranslateToPose");
+   factory.registerNodeType<BadMove>("BadMove");
+
 
    GripperInterface gripper;
    factory.registerSimpleAction("OpenGripper", 
@@ -29,7 +32,7 @@ int main (int argc, char **argv)
                                  std::bind(&GripperInterface::grip, &gripper));
 
    std::string cwd = get_current_dir_name();
-   auto tree = factory.createTreeFromFile(cwd + "/src/explain_bt/src/test_tree.xml");
+   auto tree = factory.createTreeFromFile(cwd + "/src/explain_bt/src/test_tree_fallback.xml");
    ROS_INFO("BT created from file.");
 
    ExplainableBT explainable_tree(tree);

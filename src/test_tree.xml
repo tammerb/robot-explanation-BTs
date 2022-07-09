@@ -2,14 +2,15 @@
      <BehaviorTree ID="MainTree">
         <Sequence name="do_basic_manipulation">
             <CloseGripper   name="close_gripper"/>
-            <GoHome   name="go_home"/>
-            <GoVertical     name="GoVertical"/>
+            <GoHome         name="go_home"/>
+            <GoVertical     name="go_vertical"/>
             <OpenGripper    name="open_gripper"/>
             <MoveToPose     name="move_to_pose"/>
             <GripGripper    name="grip_gripper"/>
+            <TranslateToPose     name="translate_to_pose"/>
             <MoveToPose     name="move_to_pose"/>
             <OpenGripper    name="open_gripper"/>
-            <GoHome   name="go_home"/>
+            <GoHome         name="go_home"/>
         </Sequence>
      </BehaviorTree>
  </root>

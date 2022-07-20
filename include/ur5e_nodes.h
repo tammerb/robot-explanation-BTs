@@ -86,6 +86,18 @@ class BadMove : public BT::SyncActionNode
     BT::NodeStatus tick() override;
 };
 
+class Pick : public BT::SyncActionNode
+{
+  public:
+    Pick(const std::string& name) :
+        BT::SyncActionNode(name, {})
+    {
+    }
+
+    // You must override the virtual function tick()
+    BT::NodeStatus tick() override;
+};
+
 inline void RegisterNodes(BT::BehaviorTreeFactory& factory)
 {
     static GripperInterface grip_singleton;
@@ -98,8 +110,7 @@ inline void RegisterNodes(BT::BehaviorTreeFactory& factory)
     factory.registerNodeType<MoveToPose>("MoveToPose");
     factory.registerNodeType<TranslateToPose>("TranslateToPose");
     factory.registerNodeType<BadMove>("BadMove");
-
-
+ //   factory.registerNodeType<Pick>("Pick");
 }
 
 } // end namespace

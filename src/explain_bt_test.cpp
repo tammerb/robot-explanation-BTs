@@ -120,24 +120,22 @@ int main (int argc, char **argv)
 {
    BehaviorTreeFactory factory;
 
-   using namespace UR5eNodes;
+   using namespace UR5eNodes;/*
    factory.registerNodeType<GoHome>("GoHome");
    factory.registerNodeType<GoVertical>("GoVertical");
    factory.registerNodeType<MoveToPose>("MoveToPose");
    factory.registerNodeType<TranslateToPose>("TranslateToPose");
    factory.registerNodeType<BadMove>("BadMove");
-   // factory.registerNodeType<Pick>("Pick");
+   // factory.registerNodeType<Pick>("Pick");*/
 
    GripperInterface gripper;
    factory.registerSimpleAction("OpenGripper", 
                                  std::bind(&GripperInterface::open, &gripper));
    factory.registerSimpleAction("CloseGripper", 
                                  std::bind(&GripperInterface::close, &gripper));
-   factory.registerSimpleAction("GripGripper", 
-                                 std::bind(&GripperInterface::grip, &gripper));
 
    std::string cwd = get_current_dir_name();
-   auto tree = factory.createTreeFromFile(cwd + "/src/explain_bt/src/full_manip_tree.xml");
+   auto tree = factory.createTreeFromFile(cwd + "/src/explain_bt/src/test_tree.xml");
    ROS_INFO("BT created from file.");
 
    ExplainableBT explainable_tree(tree);

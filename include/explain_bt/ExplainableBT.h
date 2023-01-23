@@ -2,7 +2,7 @@
 // ExplainableBT class contains all the proposed algorithms in the paper.
 // The only input needed is a behavior tree. Please refer to 
 //   https://www.behaviortree.dev/ to get familiar with it.
-// Please use our fork https://github.com/uml-robotics/BehaviorTree.CPP asked
+// Please use our fork https://github.com/uml-robotics/BehaviorTree.CPP because
 //   it contains modifications that make the algorithms easy to reason about.
 // You should also be familiar with ROS.
 
@@ -50,7 +50,7 @@ private:
 class ExplainableBT {
 public:
     explicit ExplainableBT(BT::Tree & tree) : tree(tree), behavior_tracker(tree) {
-        BT::printTreeRecursively(tree.rootNode());
+        printTreeRecursively(tree.rootNode());
     }
 
     BT::NodeStatus execute() {
@@ -227,7 +227,7 @@ public:
                 a = "Nothing went wrong.";
         }
         else if (boost::starts_with(q, "Can you")) {
-            std::string asked = q.substr(8, q.size() - 8 - 1);
+            std::string asked = q.substr(8, q.size() - 8);
             ROS_INFO_STREAM(asked);
             a = asked;
 
@@ -264,6 +264,7 @@ public:
             BT::TreeNode* supported_node;
             bool is_supported = false;
             for (auto sn : supported_nodes) {
+                std::cout << "****" << sn->name() << std::endl;
                 if (sn->name() == asked) {
                     is_supported = true;
                     supported_node = sn;

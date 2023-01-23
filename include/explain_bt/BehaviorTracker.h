@@ -47,8 +47,11 @@ public:
         BT::TreeNode *running_node = this->get_running_node();
 
         BT::TreeNode *p = running_node->getParent();
-        while (p != nullptr && p->type() != BT::NodeType::SUBTREE) {
+
+        while (p != nullptr && p != NULL && p->type() != BT::NodeType::SUBTREE) {
+            std::cout << "getting parent" << std::endl;
             p = p->getParent();
+            std::cout << "got parent: " <<  p << std::endl;
         }
 
         return p;

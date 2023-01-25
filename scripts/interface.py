@@ -30,7 +30,7 @@ if __name__ == "__main__":
             f"Enter \"7\" for {trigger_7}\n"
             f"Enter \"8\" for {trigger_8}"
         )
-        q = 6
+        q = int(input("Question type: "))
         if q == 1:
             what = trigger_1
         elif q == 2:

@@ -28,11 +28,12 @@ public:
     }
 
     bool has_keyed_value(const std::string &port) {
-        std::set<std::string> set;
         for (const auto &kv : ports) {
             std::string value = kv.second;
             if (is_keyed(value)) {
+                std::cout << value << "********\n";
                 if (value == port) {
+                    
                     return true;
                 }
             }
@@ -281,6 +282,7 @@ public:
                 auto ns = find_self_contained_behavior_node(supported_node);
                 auto goal = behavior_tracker.get_overall_goal_node();
                 auto subgoal = behavior_tracker.get_tree_parent();
+                std::cout << goal <<":" << goal->short_description() << " " << ns->short_description() <<  ", " << subgoal << std::endl;
                 ROS_INFO_STREAM("Checking " << goal->UID() << " vs. " << subgoal->UID());
                 if (goal->UID() == subgoal->UID()) {
                     ROS_INFO_STREAM("must have a subtree...");
@@ -329,7 +331,29 @@ private:
                         return;
                     }
 
-                    if (node->type() == BT::NodeType::ACTION) { // action node only
+                    if (node->type() == BT::NodeType::ACTION || node->type() == BT::NodeType::SUBTREE) { // action node only
+                        ROS_INFO_STREAM("type: " << node->short_description() << ", looking for: " << dynamic_input.substr(1,dynamic_input.length()-2));
+
+                        std::cout << "input ports\n";
+
+                        std::unordered_map<std::string, std::string> myMap = node->config().input_ports;
+
+                        for(std::unordered_map<std::string, std::string>::const_iterator it = myMap.begin();
+                            it != myMap.end(); ++it)
+                        {
+                            std::cout << it->first << " " << it->second << "\n";
+                        }
+
+                        std::cout << "output ports\n";
+
+                        myMap = node->config().output_ports;
+
+                        for(std::unordered_map<std::string, std::string>::const_iterator it = myMap.begin();
+                            it != myMap.end(); ++it)
+                        {
+                            std::cout << it->first << " " << it->second << "\n";
+                        }
+
                         if (Ports(node->config().output_ports).has_keyed_value(dynamic_input)) {
                             ROS_INFO_STREAM("found " << dynamic_input << "from node: " << node->short_description());
                             found = true;
@@ -337,11 +361,23 @@ private:
                     }
                 });
 
+                std::cout << "finish recursive thing" << std::endl;
+
                 if (!found) { // go up a level
+                    std::cout << "not found" << ns << std::endl;
+                    // if (ns->getParent() == nullptr) {
+                    //     break;
+                    // }
                     ns = ns->getParent();
+                    std::cout << "got parent" << ns << std::endl;
                     ROS_INFO_STREAM("went up to: " << ns->short_description());
+                    std::cout << "finish this thing i guess" << std::endl;
                 }
+
+                std::cout << "nextone" << std::endl;
             }
+
+            std::cout << "finished looking for thing" << std::endl;
         }
 
         return ns;

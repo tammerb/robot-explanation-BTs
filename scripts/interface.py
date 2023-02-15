@@ -18,18 +18,19 @@ trigger_8 = "What are you doing?"
 if __name__ == "__main__":
     rospy.init_node('explain_bt_simple_interface')
 
+    print(
+        f"Test Explainable BT interface:\n"
+        f"Enter \"1\" for {trigger_1}\n"
+        f"Enter \"2\" for {trigger_2}\n"
+        f"Enter \"3\" for {trigger_3}\n"
+        f"Enter \"4\" for {trigger_4}\n"
+        f"Enter \"5\" for {trigger_5}\n"
+        f"Enter \"6\" for {trigger_6}\n"
+        f"Enter \"7\" for {trigger_7}\n"
+        f"Enter \"8\" for {trigger_8}"
+    )
+
     while True:
-        print(
-            f"Test Explainable BT interface:\n"
-            f"Enter \"1\" for {trigger_1}\n"
-            f"Enter \"2\" for {trigger_2}\n"
-            f"Enter \"3\" for {trigger_3}\n"
-            f"Enter \"4\" for {trigger_4}\n"
-            f"Enter \"5\" for {trigger_5}\n"
-            f"Enter \"6\" for {trigger_6}\n"
-            f"Enter \"7\" for {trigger_7}\n"
-            f"Enter \"8\" for {trigger_8}"
-        )
         q = int(input("Question type: "))
         if q == 1:
             what = trigger_1

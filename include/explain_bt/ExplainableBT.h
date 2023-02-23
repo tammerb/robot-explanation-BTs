@@ -117,7 +117,7 @@ public:
             BT::FallbackNode* fallback_node = nullptr;
 
             BT::TreeNode *p = running_node->getParent();
-            while (p != nullptr && p->type() != BT::NodeType::SUBTREE) {
+            while (p != nullptr) {
                 ROS_INFO_STREAM(p->short_description());
 
                 bool is_fallback_node = (dynamic_cast<BT::FallbackNode*>(p) != nullptr);
@@ -134,9 +134,14 @@ public:
                         a = "I could not " + fallback_node->short_description() + " because ";
 
                         // find the failed child
-                        const BT::TreeNode* failed_child;
+                        const BT::TreeNode* failed_child = nullptr;
                         BT::applyRecursiveVisitorSelectively(fallback_node, [&failed_child](const BT::TreeNode* node) -> bool {
-                            if (node->has_failed() && (node->type() == BT::NodeType::CONDITION || node->type() == BT::NodeType::ACTION)) {
+                            if (node->has_failed() && (
+                                        node->type() == BT::NodeType::CONDITION || 
+                                        node->type() == BT::NodeType::ACTION || 
+                                        node->type() == BT::NodeType::DECORATOR // Account for invert
+                                    )
+                                ) {
                                 failed_child = node;
                                 return true;
                             }

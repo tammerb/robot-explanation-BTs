@@ -1,10 +1,13 @@
 import os
 import rospy
 import rospkg
+import functools
 
 from qt_gui.plugin import Plugin
 from python_qt_binding import loadUi
 from python_qt_binding.QtWidgets import QWidget
+
+from explain_bt.srv import Explain, ExplainRequest
 
 
 class ExplainBTPlugin(Plugin):
@@ -34,9 +37,12 @@ class ExplainBTPlugin(Plugin):
         # Give QObjects reasonable names
         self._widget.setObjectName('ExplainBTPlugin')
 
-
-        self._widget.Test.clicked[bool].connect(self._handle_test_clicked)
-
+        self._widget.button_1.clicked[bool].connect(functools.partial(self._handle_explain_bt_service, question="What are you doing?"))
+        self._widget.button_2.clicked[bool].connect(functools.partial(self._handle_explain_bt_service, question="Why are you doing this?"))
+        self._widget.button_3.clicked[bool].connect(functools.partial(self._handle_explain_bt_service, question="How do you achieve your goal?"))
+        self._widget.button_4.clicked[bool].connect(functools.partial(self._handle_explain_bt_service, question="What is your subgoal?"))
+        self._widget.button_5.clicked[bool].connect(functools.partial(self._handle_explain_bt_service, question="What are the steps for your subgoal?"))
+        self._widget.button_6.clicked[bool].connect(functools.partial(self._handle_explain_bt_service, question="What went wrong?"))
 
         # Show _widget.windowTitle on left-top of each plugin (when 
         # it's set in _widget). This is useful when you open multiple 
@@ -49,8 +55,16 @@ class ExplainBTPlugin(Plugin):
         context.add_widget(self._widget)
 
 
-    def _handle_test_clicked(self):
-        print("I'm clicked")
+    def _handle_explain_bt_service(self, question):
+        try:
+            add_two_ints = rospy.ServiceProxy('/explainable_bt', Explain)
+            reply = add_two_ints(question).reply
+        except rospy.ServiceException as e:
+            print("Service call failed: %s"%e)
+            return
+
+
+        self._widget.text_browser.append(reply)
 
 
     def shutdown_plugin(self):

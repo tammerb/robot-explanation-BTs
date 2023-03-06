@@ -101,7 +101,7 @@
     <string>What went wrong?</string>
    </property>
   </widget>
-  <widget class="QLabel" name="video_label">
+  <widget class="QLabel" name="image_label">
    <property name="geometry">
     <rect>
      <x>580</x>

@@ -7,6 +7,8 @@
 // You should also be familiar with ROS.
 
 #include <ros/ros.h>
+#include <regex>
+#include <stdexcept>
 #include <behaviortree_cpp_v3/bt_factory.h>
 #include "explain_bt/Explain.h"
 #include "BehaviorTracker.h"
@@ -64,13 +66,14 @@ public:
 
         ROS_INFO_STREAM("Q: " << q);
         BT::TreeNode* n = behavior_tracker.get_running_node();
+        auto b = n->config().blackboard;
         if (q == "What are you doing?") {
-            a = "I " + n->short_description() + ".";
+            a = "I " + get_node_description(n, b) + ".";
         }
         else if (q == "Why are you doing this?") {
-            std::string goal = behavior_tracker.get_running_node_different_control_parent()->name();
+            auto control_parent = behavior_tracker.get_running_node_different_control_parent();
 
-            a = "I " + (n->short_description()) + " in order to " + goal + ".";
+            a = "I " + get_node_description(n, b) + " in order to " + get_node_description(control_parent, b) + ".";
         }
         else if (q == "What is your subgoal?") {
             BT::TreeNode* tree_parent = behavior_tracker.get_tree_parent();
@@ -91,7 +94,7 @@ public:
                 a = "To achieve the subgoal \"" + goal + "\", I need to do " + std::to_string(steps.size()) +
                     " steps. ";
                 for (int i = 0; i < steps.size(); ++i) {
-                    a += std::to_string(i + 1) + ". " + steps.at(i)->name() + ". ";
+                    a += std::to_string(i + 1) + ". " + get_node_description(steps.at(i), b) + ". ";
                 }
             }
         }
@@ -105,7 +108,7 @@ public:
             std::vector<BT::TreeNode*> steps = find_steps(tree.rootNode());
             a = "To achieve the goal \"" + goal + "\", I need to do " + std::to_string(steps.size()) + " steps. ";
             for (int i = 0; i < steps.size(); ++i) {
-                a += std::to_string(i+1) + ". " + steps.at(i)->name() + ". ";
+                a += std::to_string(i+1) + ". " + get_node_description(steps.at(i), b) + ". ";
             }
         }
         else if (q == "What went wrong?") {
@@ -406,6 +409,43 @@ private:
         applyRecursiveVisitorSelectively(parent_node, visitor);
 
         return steps;
+    }
+
+     std::string get_node_description(BT::TreeNode *node, std::shared_ptr<BT::Blackboard> running_node_blackboard)
+    {   
+        auto blackboard = node->config().blackboard;
+
+        if (! blackboard) blackboard = running_node_blackboard;
+
+        std::regex r("\\{(.*?)\\}");
+
+        std::string input_str = node->short_description();
+        std::string output_str = "";
+        int start = 0;
+
+        for (
+            std::sregex_iterator i = std::sregex_iterator(input_str.begin(), input_str.end(), r);
+            i != std::sregex_iterator();
+            ++i)
+        {
+            std::smatch m = *i;
+
+            int end = m.position();
+            output_str += input_str.substr(start, end - start);
+
+            std::string key = m.str();
+            key = key.substr(1, key.length() - 2);
+
+            std::string value = blackboard->get<std::string>(key);
+
+            output_str += value;
+
+            start = end + m.str().length();
+        }
+
+        output_str += input_str.substr(start);
+
+        return output_str;
     }
 
     BT::Tree &tree;

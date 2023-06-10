@@ -50,7 +50,7 @@ class ExplainBTPlugin(Plugin):
         self._widget.button_6.clicked[bool].connect(functools.partial(self._handle_explain_bt_service, question="What went wrong?"))
 
         self._bridge = CvBridge()
-        self._image_sub = rospy.Subscriber('/realsense_image', Image, self._handle_image_update)
+        self._image_sub = rospy.Subscriber('/tag_detections_image', Image, self._handle_image_update)
 
         # Show _widget.windowTitle on left-top of each plugin (when 
         # it's set in _widget). This is useful when you open multiple 
@@ -77,15 +77,16 @@ class ExplainBTPlugin(Plugin):
     def _handle_image_update(self, img_msg):
         cv_img = self._bridge.imgmsg_to_cv2(img_msg, desired_encoding='passthrough')
         qt_img = self.convert_cv_qt(cv_img)
-        self.image_label.setPixmap(qt_img)
+        self._widget.image_label.setPixmap(qt_img)
 
     def convert_cv_qt(self, cv_img):
         """Convert from an opencv image to QPixmap"""
-        rgb_image = cv2.cvtColor(cv_img, cv2.COLOR_BGR2RGB)
+        # rgb_image = cv2.cvtColor(cv_img, cv2.COLOR_BGR2RGB)
+        rgb_image = cv_img
         h, w, ch = rgb_image.shape
         bytes_per_line = ch * w
         convert_to_Qt_format = QtGui.QImage(rgb_image.data, w, h, bytes_per_line, QtGui.QImage.Format_RGB888)
-        p = convert_to_Qt_format.scaled(self.disply_width, self.display_height, Qt.KeepAspectRatio)
+        p = convert_to_Qt_format.scaled(330, 330, Qt.KeepAspectRatio)
         return QPixmap.fromImage(p)
 
     def shutdown_plugin(self):

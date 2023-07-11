@@ -9,7 +9,7 @@
 #include <ros/ros.h>
 #include <regex>
 #include <stdexcept>
-#include <behaviortree_cpp_v3/bt_factory.h>
+#include <behaviortree_cpp/bt_factory.h>
 #include "explain_bt/Explain.h"
 #include "BehaviorTracker.h"
 #include <boost/algorithm/string/predicate.hpp> // starts_with
@@ -57,7 +57,7 @@ public:
     }
 
     BT::NodeStatus execute() {
-        return tree.tickRoot();
+        return tree.tickOnce();
     }
 
     bool explain_callback(explain_bt::Explain::Request &req, explain_bt::Explain::Response &res) {
@@ -65,7 +65,8 @@ public:
         std::string a; // answer
 
         ROS_INFO_STREAM("Q: " << q);
-        BT::TreeNode* n = behavior_tracker.get_running_node();
+        const BT::TreeNode* n = behavior_tracker.get_running_node();
+
         auto b = n->config().blackboard;
         if (q == "What are you doing?") {
             a = "I " + get_node_description(n, b) + ".";
@@ -320,7 +321,7 @@ private:
 
         // build unique, keyed input ports
         std::set<std::string> unique_keyed_input_ports;
-        applyRecursiveVisitor(supported_node, [&unique_keyed_input_ports](BT::TreeNode *node) {
+        applyRecursiveVisitor(supported_node, [&unique_keyed_input_ports](const BT::TreeNode *node) {
             if (node->type() == BT::NodeType::ACTION) { // action node only
                 auto set = Ports(node->config().input_ports).get_keyed_value_set();
                 unique_keyed_input_ports.insert(set.begin(), set.end());
@@ -334,7 +335,7 @@ private:
             bool found = false;
 
             while ( ! found) {
-                applyRecursiveVisitor(ns, [&found, &dynamic_input](BT::TreeNode *node) {
+                applyRecursiveVisitor(ns, [&found, &dynamic_input](const BT::TreeNode *node) {
                     if (found) {
                         return;
                     }
@@ -411,7 +412,7 @@ private:
         return steps;
     }
 
-     std::string get_node_description(BT::TreeNode *node, std::shared_ptr<BT::Blackboard> running_node_blackboard)
+     std::string get_node_description(const BT::TreeNode *node, std::shared_ptr<BT::Blackboard> running_node_blackboard)
     {   
         auto blackboard = node->config().blackboard;
 

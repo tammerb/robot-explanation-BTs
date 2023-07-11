@@ -8,7 +8,7 @@ find_package(catkin REQUIRED COMPONENTS
   roscpp
   message_generation
   std_msgs
-  behaviortree_cpp_v3
+  behaviortree_cpp
 )
 
 find_package(Boost REQUIRED system filesystem date_time thread)
@@ -31,7 +31,7 @@ catkin_package(
     CATKIN_DEPENDS
     roscpp
     std_msgs
-    behaviortree_cpp_v3
+    behaviortree_cpp
 )
 
 include_directories( include ${catkin_INCLUDE_DIRS})

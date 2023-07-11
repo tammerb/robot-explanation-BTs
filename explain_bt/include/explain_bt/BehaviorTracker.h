@@ -1,6 +1,6 @@
 #pragma once
 
-#include <behaviortree_cpp_v3/loggers/bt_cout_logger.h>
+#include <behaviortree_cpp/loggers/bt_cout_logger.h>
 
 class BehaviorTracker : public BT::StdCoutLogger {
 public:

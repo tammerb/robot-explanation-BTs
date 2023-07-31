@@ -42,12 +42,13 @@ class ExplainBTPlugin(Plugin):
         # Give QObjects reasonable names
         self._widget.setObjectName('ExplainBTPlugin')
 
-        self._widget.button_1.clicked[bool].connect(functools.partial(self._handle_explain_bt_service, question="What are you doing?"))
-        self._widget.button_2.clicked[bool].connect(functools.partial(self._handle_explain_bt_service, question="Why are you doing this?"))
-        self._widget.button_3.clicked[bool].connect(functools.partial(self._handle_explain_bt_service, question="How do you achieve your goal?"))
-        self._widget.button_4.clicked[bool].connect(functools.partial(self._handle_explain_bt_service, question="What is your subgoal?"))
-        self._widget.button_5.clicked[bool].connect(functools.partial(self._handle_explain_bt_service, question="What are the steps for your subgoal?"))
-        self._widget.button_6.clicked[bool].connect(functools.partial(self._handle_explain_bt_service, question="What went wrong?"))
+        self._widget.button_1.clicked[bool].connect(functools.partial(self._handle_explain_bt_service, question=ExplainRequest.WHAT_ARE_YOU_DOING))
+        self._widget.button_2.clicked[bool].connect(functools.partial(self._handle_explain_bt_service, question=ExplainRequest.WHY_ARE_YOU_DOING_THIS))
+        self._widget.button_3.clicked[bool].connect(functools.partial(self._handle_explain_bt_service, question=ExplainRequest.WHAT_IS_YOUR_SUBGOAL))
+        self._widget.button_4.clicked[bool].connect(functools.partial(self._handle_explain_bt_service, question=ExplainRequest.HOW_DO_YOU_ACHIEVE_YOUR_SUBGOAL))
+        self._widget.button_5.clicked[bool].connect(functools.partial(self._handle_explain_bt_service, question=ExplainRequest.WHAT_IS_YOUR_GOAL))
+        self._widget.button_6.clicked[bool].connect(functools.partial(self._handle_explain_bt_service, question=ExplainRequest.HOW_DO_YOU_ACHIEVE_YOUR_GOAL))
+        self._widget.button_7.clicked[bool].connect(functools.partial(self._handle_explain_bt_service, question=ExplainRequest.WHAT_WENT_WRONG))    
 
         self._bridge = CvBridge()
         self._image_sub = rospy.Subscriber('/tag_detections_image', Image, self._handle_image_update)
@@ -66,13 +67,13 @@ class ExplainBTPlugin(Plugin):
     def _handle_explain_bt_service(self, question):
         try:
             rospy.wait_for_service('/explainable_bt', timeout=0.1)
-            add_two_ints = rospy.ServiceProxy('/explainable_bt', Explain)
-            reply = add_two_ints(question).reply
+            explain_srv_client = rospy.ServiceProxy('/explainable_bt', Explain)
+            answer = explain_srv_client(question).answer
         except rospy.ServiceException as e:
             print("Service call failed: %s"%e)
             return
 
-        self._widget.text_browser.append(reply)
+        self._widget.text_browser.append(answer + "\n")
 
     def _handle_image_update(self, img_msg):
         cv_img = self._bridge.imgmsg_to_cv2(img_msg, desired_encoding='passthrough')

@@ -297,6 +297,74 @@ namespace XBT
         return answer;
     }
 
+    std::string ExplainableBT::handleWhatAreCurrentPreConditions()
+    {
+        std::string answer;
+        const BT::TreeNode *n = behavior_tracker.get_running_node();
+        auto preconditions = n->config().pre_conditions;
+
+        answer = "For \"" +
+                 n->short_description() +
+                 "\", I have " +
+                 std::to_string(preconditions.size()) +
+                 " preconditions. ";
+
+        for (const auto &[cond_id, script] : preconditions)
+        {
+            switch (cond_id)
+            {
+            case BT::PreCond::SUCCESS_IF:
+                answer += "Skip and succeed if " + script + " is true. ";
+                break;
+            case BT::PreCond::FAILURE_IF:
+                answer += "Skip and fail if " + script + " is true. ";
+                break;
+            case BT::PreCond::SKIP_IF:
+                answer += "Skip if " + script + " is true. ";
+                break;
+            case BT::PreCond::WHILE_TRUE:
+                answer += "Skip while " + script + " is true. ";
+                break;
+            }
+        }
+
+        return answer;
+    }
+
+    std::string ExplainableBT::handleWhatAreCurrentPostConditions()
+    {
+        std::string answer;
+        const BT::TreeNode *n = behavior_tracker.get_running_node();
+        auto postconditions = n->config().post_conditions;
+
+        answer = "For \"" +
+                 n->short_description() +
+                 "\", I have " +
+                 std::to_string(postconditions.size()) +
+                 " postconditions. ";
+
+        for (const auto &[cond_id, script] : postconditions)
+        {
+            switch (cond_id)
+            {
+            case BT::PostCond::ON_SUCCESS:
+                answer += "If successful, " + script + ". ";
+                break;
+            case BT::PostCond::ON_FAILURE:
+                answer += "If failed, " + script + ". ";
+                break;
+            case BT::PostCond::ALWAYS:
+                answer += "Always " + script + ". ";
+                break;
+            case BT::PostCond::ON_HALTED:
+                answer += "If halted, " + script + ". ";
+                break;
+            }
+        }
+
+        return answer;
+    }
+
     bool ExplainableBT::explain_callback(explain_bt::Explain::Request &req, explain_bt::Explain::Response &res)
     {
         uint8_t question = req.question;
@@ -339,6 +407,14 @@ namespace XBT
         case explain_bt::ExplainRequest::WHAT_IS_NEXT_ACTION_IF_FAIL:
             ROS_INFO_STREAM("Q: what is your next action if you fail?");
             answer = handleWhatIsNextActionIfFail();
+            break;
+        case explain_bt::ExplainRequest::WHAT_ARE_CURRENT_PRE_CONDITIONS:
+            ROS_INFO_STREAM("Q: what are your current pre conditions?");
+            answer = handleWhatAreCurrentPreConditions();
+            break;
+        case explain_bt::ExplainRequest::WHAT_ARE_CURRENT_POST_CONDITIONS:
+            ROS_INFO_STREAM("Q: what are your current post conditions?");
+            answer = handleWhatAreCurrentPostConditions();
             break;
         default:
             ROS_INFO_STREAM("Q: " << question << " is not a valid question.");

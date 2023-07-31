@@ -92,6 +92,10 @@ private:
 
     std::string handleWhatIsNextActionIfFail();
 
+    std::string handleWhatAreCurrentPreConditions();
+
+    std::string handleWhatAreCurrentPostConditions();
+
     BT::Tree &tree;
     BehaviorTracker behavior_tracker;
 };

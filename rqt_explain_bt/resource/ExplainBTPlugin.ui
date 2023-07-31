@@ -57,9 +57,9 @@ p, li { white-space: pre-wrap; }
    <property name="geometry">
     <rect>
      <x>20</x>
-     <y>510</y>
+     <y>570</y>
      <width>921</width>
-     <height>401</height>
+     <height>341</height>
     </rect>
    </property>
    <property name="autoFillBackground">
@@ -235,6 +235,42 @@ p, li { white-space: pre-wrap; }
    </property>
    <property name="text">
     <string>What is your next action if you fail?</string>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="button_10">
+   <property name="geometry">
+    <rect>
+     <x>20</x>
+     <y>470</y>
+     <width>411</width>
+     <height>41</height>
+    </rect>
+   </property>
+   <property name="font">
+    <font>
+     <pointsize>14</pointsize>
+    </font>
+   </property>
+   <property name="text">
+    <string>What are your current pre conditions?</string>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="button_11">
+   <property name="geometry">
+    <rect>
+     <x>20</x>
+     <y>520</y>
+     <width>411</width>
+     <height>41</height>
+    </rect>
+   </property>
+   <property name="font">
+    <font>
+     <pointsize>14</pointsize>
+    </font>
+   </property>
+   <property name="text">
+    <string>What are your current post conditions?</string>
    </property>
   </widget>
  </widget>

@@ -4,15 +4,26 @@
     <BehaviorTree ID="MainTree">
         <Sequence name="replace battery">
             <Script code=" item:='battery' " />
-            <SubTree ID="OpenCover" name="open {item} cover" item="{item}"/>
-            <SubTree ID="PickItem" name="pick battery" item="battery"/>
+            <SubTree ID="OpenCover" name="open {item} cover" item="{item}" />
+            <SubTree ID="PickItem" name="pick battery" item="battery" />
         </Sequence>
     </BehaviorTree>
 
     <BehaviorTree ID="OpenCover">
         <Fallback name="open {item} cover">
-            <DummyAction name="lift {item} cover" succeed="false" msec="3000" />
-            <DummyAction name="break open {item} cover" succeed="true" msec="3000" />
+            <DummyAction
+                name="lift {item} cover"
+                succeed="false"
+                msec="3000"
+                _onSuccess="open:=true"
+                _onFailure="open:=false" 
+            />
+            <DummyAction 
+            name="break open {item} cover" 
+            succeed="true" 
+            msec="3000" 
+            _skipIf="open"
+            />
         </Fallback>
     </BehaviorTree>
 
@@ -23,9 +34,5 @@
             <DummyAction name="retreat" succeed="true" msec="3000" />
         </Sequence>
     </BehaviorTree>
-
-    
-
-    
 
 </root>

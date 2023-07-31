@@ -1,0 +1,31 @@
+<root BTCPP_format="4" main_tree_to_execute="MainTree">
+
+
+    <BehaviorTree ID="MainTree">
+        <Sequence name="replace battery">
+            <Script code=" item:='battery' " />
+            <SubTree ID="OpenCover" name="open {item} cover" item="{item}"/>
+            <SubTree ID="PickItem" name="pick battery" item="battery"/>
+        </Sequence>
+    </BehaviorTree>
+
+    <BehaviorTree ID="OpenCover">
+        <Fallback name="open {item} cover">
+            <DummyAction name="lift {item} cover" succeed="false" msec="3000" />
+            <DummyAction name="break open {item} cover" succeed="true" msec="3000" />
+        </Fallback>
+    </BehaviorTree>
+
+    <BehaviorTree ID="PickItem">
+        <Sequence name="pick {item}">
+            <DummyAction name="approach {item}" succeed="true" msec="3000" />
+            <DummyAction name="grasp {item}" succeed="true" msec="3000" />
+            <DummyAction name="retreat" succeed="true" msec="3000" />
+        </Sequence>
+    </BehaviorTree>
+
+    
+
+    
+
+</root>

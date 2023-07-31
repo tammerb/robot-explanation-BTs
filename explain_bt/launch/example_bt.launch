@@ -1,0 +1,4 @@
+<launch>
+    <param name="behavior_tree_xml" value="$(find explain_bt)/bt_xml/example_bt.xml"/>
+    <node pkg="explain_bt" type="example_bt" name="example_bt" output="screen"/>
+</launch>

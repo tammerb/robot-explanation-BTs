@@ -88,6 +88,10 @@ private:
      */
     std::string handleWhatWentWrong();
 
+    std::string handleWhatIsNextActionIfSuccess();
+
+    std::string handleWhatIsNextActionIfFail();
+
     BT::Tree &tree;
     BehaviorTracker behavior_tracker;
 };

@@ -255,6 +255,48 @@ namespace XBT
         return answer;
     }
 
+    std::string ExplainableBT::handleWhatIsNextActionIfSuccess()
+    {
+        std::string answer;
+        auto n = behavior_tracker.get_running_node();
+        auto next_n = get_next_node_on_success(n);
+        if (next_n == nullptr)
+        {
+            answer = "If " +
+                     n->short_description() +
+                     " succeeds, I will finish.";
+        }
+        else
+        {
+            answer = "If " +
+                     n->short_description() +
+                     " succeeds, my next action is " +
+                     next_n->short_description() + ".";
+        }
+        return answer;
+    }
+
+    std::string ExplainableBT::handleWhatIsNextActionIfFail()
+    {
+        std::string answer;
+        auto n = behavior_tracker.get_running_node();
+        auto next_n = get_next_node_on_fail(n);
+        if (next_n == nullptr)
+        {
+            answer = "If " +
+                     n->short_description() +
+                     " fails, I will finish.";
+        }
+        else
+        {
+            answer = "If " +
+                     n->short_description() +
+                     " fails, my next action is " +
+                     next_n->short_description() + ".";
+        }
+        return answer;
+    }
+
     bool ExplainableBT::explain_callback(explain_bt::Explain::Request &req, explain_bt::Explain::Response &res)
     {
         uint8_t question = req.question;
@@ -289,6 +331,14 @@ namespace XBT
         case explain_bt::ExplainRequest::WHAT_WENT_WRONG:
             ROS_INFO_STREAM("Q: what went wrong?");
             answer = handleWhatWentWrong();
+            break;
+        case explain_bt::ExplainRequest::WHAT_IS_NEXT_ACTION_IF_SUCCESS:
+            ROS_INFO_STREAM("Q: what is your next action if you succeed?");
+            answer = handleWhatIsNextActionIfSuccess();
+            break;
+        case explain_bt::ExplainRequest::WHAT_IS_NEXT_ACTION_IF_FAIL:
+            ROS_INFO_STREAM("Q: what is your next action if you fail?");
+            answer = handleWhatIsNextActionIfFail();
             break;
         default:
             ROS_INFO_STREAM("Q: " << question << " is not a valid question.");

@@ -48,7 +48,9 @@ class ExplainBTPlugin(Plugin):
         self._widget.button_4.clicked[bool].connect(functools.partial(self._handle_explain_bt_service, question=ExplainRequest.HOW_DO_YOU_ACHIEVE_YOUR_SUBGOAL))
         self._widget.button_5.clicked[bool].connect(functools.partial(self._handle_explain_bt_service, question=ExplainRequest.WHAT_IS_YOUR_GOAL))
         self._widget.button_6.clicked[bool].connect(functools.partial(self._handle_explain_bt_service, question=ExplainRequest.HOW_DO_YOU_ACHIEVE_YOUR_GOAL))
-        self._widget.button_7.clicked[bool].connect(functools.partial(self._handle_explain_bt_service, question=ExplainRequest.WHAT_WENT_WRONG))    
+        self._widget.button_7.clicked[bool].connect(functools.partial(self._handle_explain_bt_service, question=ExplainRequest.WHAT_WENT_WRONG))  
+        self._widget.button_8.clicked[bool].connect(functools.partial(self._handle_explain_bt_service, question=ExplainRequest.WHAT_IS_NEXT_ACTION_IF_SUCCESS))
+        self._widget.button_9.clicked[bool].connect(functools.partial(self._handle_explain_bt_service, question=ExplainRequest.WHAT_IS_NEXT_ACTION_IF_FAIL))    
 
         self._bridge = CvBridge()
         self._image_sub = rospy.Subscriber('/tag_detections_image', Image, self._handle_image_update)

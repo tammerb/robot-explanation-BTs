@@ -29,4 +29,8 @@ namespace XBT {
      */
     std::vector<BT::TreeNode*> get_seq_exec_nodes(BT::TreeNode* p);
 
+    BT::TreeNode* get_next_node_on_success(BT::TreeNode* n);
+
+    BT::TreeNode* get_next_node_on_fail(BT::TreeNode* n);
+    
 } // namespace XBT

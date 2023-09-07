@@ -29,7 +29,7 @@ generate_messages(
 ## Specify package properties and dependencies
 catkin_package(
   INCLUDE_DIRS include
-  LIBRARIES
+  LIBRARIES ${PROJECT_NAME}
   CATKIN_DEPENDS
   roscpp
   std_msgs
@@ -47,6 +47,7 @@ include_directories(
 add_library(${PROJECT_NAME}
   src/BehaviorTracker.cpp
   src/ExplainableBT.cpp
+  src/utils/utils.cpp
 )
 target_link_libraries(${PROJECT_NAME} ${catkin_LIBRARIES} ${Boost_LIBRARIES})
 install(

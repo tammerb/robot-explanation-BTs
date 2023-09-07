@@ -8,6 +8,11 @@ namespace XBT
         printTreeRecursively(tree.rootNode());
     }
 
+    BT::NodeStatus ExplainableBT::getStatus()
+    {
+        return tree.rootNode()->status();
+    }
+
     BT::NodeStatus ExplainableBT::execute()
     {
         return tree.tickOnce();

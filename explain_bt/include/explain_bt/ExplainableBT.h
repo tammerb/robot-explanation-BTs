@@ -39,6 +39,15 @@ public:
     BT::NodeStatus execute();
 
     /**
+     * @brief Get the status of the Behavior Tree (BT).
+     * 
+     * This method returns the status of the root node of the BT.
+     * 
+     * @return BT::NodeStatus The status of the root node.
+    */
+    BT::NodeStatus getStatus();
+
+    /**
      * @brief Callback function to generate explanations.
      * 
      * This method is called as a callback to handle explain queries

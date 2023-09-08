@@ -36,7 +36,7 @@ public:
      * 
      * @return BT::NodeStatus The status of the root node after the tick.
      */
-    BT::NodeStatus execute();
+    BT::NodeStatus tick();
 
     /**
      * @brief Get the status of the Behavior Tree (BT).
@@ -45,7 +45,16 @@ public:
      * 
      * @return BT::NodeStatus The status of the root node.
     */
-    BT::NodeStatus getStatus();
+    BT::NodeStatus status();
+
+    /**
+     * @brief Halt the Behavior Tree (BT).
+     * 
+     * This method halts the execution of the BT.
+     * 
+     * @return void
+     */
+    void halt();
 
     /**
      * @brief Callback function to generate explanations.

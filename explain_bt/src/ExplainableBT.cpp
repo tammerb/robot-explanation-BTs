@@ -8,12 +8,17 @@ namespace XBT
         printTreeRecursively(tree.rootNode());
     }
 
-    BT::NodeStatus ExplainableBT::getStatus()
+    void ExplainableBT::halt()
+    {
+        tree.haltTree();
+    }
+
+    BT::NodeStatus ExplainableBT::status()
     {
         return tree.rootNode()->status();
     }
 
-    BT::NodeStatus ExplainableBT::execute()
+    BT::NodeStatus ExplainableBT::tick()
     {
         return tree.tickOnce();
     }
@@ -22,6 +27,10 @@ namespace XBT
     {
         std::string answer;
         const BT::TreeNode *n = behavior_tracker.get_running_node();
+
+        if (n == nullptr)
+            return std::string("The tree isn't running.");
+
         answer = "I " + n->short_description() + ".";
         return answer;
     }
@@ -30,6 +39,10 @@ namespace XBT
     {
         std::string answer;
         auto n = behavior_tracker.get_running_node();
+
+        if (n == nullptr)
+            return std::string("The tree isn't running.");
+
         auto p = get_diff_name_parent(n);
 
         if (p == nullptr)
@@ -50,6 +63,9 @@ namespace XBT
         std::string answer;
         auto n = behavior_tracker.get_running_node();
 
+        if (n == nullptr)
+            return std::string("The tree isn't running.");
+
         auto p = get_subtree_parent(n);
 
         if (p == nullptr)
@@ -66,6 +82,9 @@ namespace XBT
     {
         std::string answer;
         auto n = behavior_tracker.get_running_node();
+
+        if (n == nullptr)
+            return std::string("The tree isn't running.");
 
         auto p = get_subtree_parent(n);
 
@@ -100,6 +119,10 @@ namespace XBT
     {
         std::string answer;
         auto n = behavior_tracker.get_running_node();
+
+        if (n == nullptr)
+            return std::string("The tree isn't running.");
+
         auto root = tree.rootNode();
 
         std::vector<BT::TreeNode *> steps = get_seq_exec_nodes(root);
@@ -120,6 +143,9 @@ namespace XBT
     {
         std::string answer;
         BT::TreeNode *running_node = behavior_tracker.get_running_node();
+
+        if (running_node == nullptr)
+            return std::string("The tree isn't running.");
 
         bool is_wrong = false;
         bool is_fell_back = false;
@@ -264,6 +290,10 @@ namespace XBT
     {
         std::string answer;
         auto n = behavior_tracker.get_running_node();
+
+        if (n == nullptr)
+            return std::string("The tree isn't running.");
+
         auto next_n = get_next_node_on_success(n);
         if (next_n == nullptr)
         {
@@ -285,6 +315,10 @@ namespace XBT
     {
         std::string answer;
         auto n = behavior_tracker.get_running_node();
+
+        if (n == nullptr)
+            return std::string("The tree isn't running.");
+
         auto next_n = get_next_node_on_fail(n);
         if (next_n == nullptr)
         {
@@ -306,6 +340,10 @@ namespace XBT
     {
         std::string answer;
         const BT::TreeNode *n = behavior_tracker.get_running_node();
+
+        if (n == nullptr)
+            return std::string("The tree isn't running.");
+
         auto preconditions = n->config().pre_conditions;
 
         answer = "For \"" +
@@ -340,6 +378,10 @@ namespace XBT
     {
         std::string answer;
         const BT::TreeNode *n = behavior_tracker.get_running_node();
+
+        if (n == nullptr)
+            return std::string("The tree isn't running.");
+
         auto postconditions = n->config().post_conditions;
 
         answer = "For \"" +
@@ -423,7 +465,7 @@ namespace XBT
             break;
         default:
             ROS_INFO_STREAM("Q: " << question << " is not a valid question.");
-            answer = "Sorry. I don't understand that question.";
+            answer = "Sorry, I don't understand that question.";
             break;
         }
 

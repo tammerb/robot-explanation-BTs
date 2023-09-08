@@ -95,9 +95,9 @@ int main(int argc, char **argv)
     XBT::ExplainableBT explainable_tree(tree);
 
     // create service
-    ros::ServiceServer service = nh.advertiseService("explainable_bt", &XBT::ExplainableBT::explain_callback, &explainable_tree);    
+    ros::ServiceServer service = nh.advertiseService("explain_tree", &XBT::ExplainableBT::explain_callback, &explainable_tree);    
 
-    while (ros::ok() && explainable_tree.execute() == NodeStatus::RUNNING)
+    while (ros::ok() && explainable_tree.tick() == NodeStatus::RUNNING)
     {
         // sleep for 10ms
         ros::Duration(0.01).sleep();

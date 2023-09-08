@@ -11,6 +11,7 @@ from python_qt_binding.QtGui import QPixmap
 from python_qt_binding.QtCore import Qt
 
 from explain_bt.srv import Explain, ExplainRequest
+from std_srvs.srv import Empty, EmptyRequest
 from cv_bridge import CvBridge
 from sensor_msgs.msg import Image
 import cv2
@@ -52,7 +53,11 @@ class ExplainBTPlugin(Plugin):
         self._widget.button_8.clicked[bool].connect(functools.partial(self._handle_explain_bt_service, question=ExplainRequest.WHAT_IS_NEXT_ACTION_IF_SUCCESS))
         self._widget.button_9.clicked[bool].connect(functools.partial(self._handle_explain_bt_service, question=ExplainRequest.WHAT_IS_NEXT_ACTION_IF_FAIL)) 
         self._widget.button_10.clicked[bool].connect(functools.partial(self._handle_explain_bt_service, question=ExplainRequest.WHAT_ARE_CURRENT_PRE_CONDITIONS)) 
-        self._widget.button_11.clicked[bool].connect(functools.partial(self._handle_explain_bt_service, question=ExplainRequest.WHAT_ARE_CURRENT_POST_CONDITIONS))    
+        self._widget.button_11.clicked[bool].connect(functools.partial(self._handle_explain_bt_service, question=ExplainRequest.WHAT_ARE_CURRENT_POST_CONDITIONS)) 
+
+        self._widget.button_start.clicked[bool].connect(functools.partial(self._handle_empty_service, service_name='/start_tree'))
+        self._widget.button_stop.clicked[bool].connect(functools.partial(self._handle_empty_service, service_name='/stop_tree'))
+        self._widget.button_reset.clicked[bool].connect(functools.partial(self._handle_empty_service, service_name='/reset_tree'))
 
         self._bridge = CvBridge()
         self._image_sub = rospy.Subscriber('/tag_detections_image', Image, self._handle_image_update)
@@ -70,14 +75,23 @@ class ExplainBTPlugin(Plugin):
 
     def _handle_explain_bt_service(self, question):
         try:
-            rospy.wait_for_service('/explainable_bt', timeout=0.1)
-            explain_srv_client = rospy.ServiceProxy('/explainable_bt', Explain)
+            rospy.wait_for_service('/explain_tree', timeout=0.1)
+            explain_srv_client = rospy.ServiceProxy('/explain_tree', Explain)
             answer = explain_srv_client(question).answer
         except rospy.ServiceException as e:
             print("Service call failed: %s"%e)
             return
 
         self._widget.text_browser.append(answer + "\n")
+
+    def _handle_empty_service(self, service_name):
+        try:
+            rospy.wait_for_service(service_name, timeout=0.1)
+            srv_client = rospy.ServiceProxy(service_name, Empty)
+            srv_client(EmptyRequest())
+        except rospy.ServiceException as e:
+            print("Service call failed: %s"%e)
+            return
 
     def _handle_image_update(self, img_msg):
         cv_img = self._bridge.imgmsg_to_cv2(img_msg, desired_encoding='passthrough')

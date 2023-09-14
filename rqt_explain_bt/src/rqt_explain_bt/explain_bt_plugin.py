@@ -62,6 +62,9 @@ class ExplainBTPlugin(Plugin):
         self._bridge = CvBridge()
         self._image_sub = rospy.Subscriber('/tag_detections_image', Image, self._handle_image_update)
 
+        self._image_label_width = self._widget.image_label.width()
+        self._image_label_height = self._widget.image_label.height()
+
         # Show _widget.windowTitle on left-top of each plugin (when 
         # it's set in _widget). This is useful when you open multiple 
         # plugins at once. Also if you open multiple instances of your 
@@ -105,7 +108,7 @@ class ExplainBTPlugin(Plugin):
         h, w, ch = rgb_image.shape
         bytes_per_line = ch * w
         convert_to_Qt_format = QtGui.QImage(rgb_image.data, w, h, bytes_per_line, QtGui.QImage.Format_RGB888)
-        p = convert_to_Qt_format.scaled(330, 330, Qt.KeepAspectRatio)
+        p = convert_to_Qt_format.scaled(self._image_label_width, self._image_label_height, Qt.KeepAspectRatio)
         return QPixmap.fromImage(p)
 
     def shutdown_plugin(self):

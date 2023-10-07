@@ -1,0 +1,20 @@
+<root BTCPP_format="4" main_tree_to_execute="MainTree">
+
+    <BehaviorTree ID="MainTree">
+        <Sequence name="invert sequence">
+            <Inverter name="inverter">
+                <DummyAction
+                    name="action 1"
+                    succeed="false"
+                    msec="5000"
+                />
+            </Inverter>
+            <DummyAction
+                name="action 2"
+                succeed="true"
+                msec="5000"
+            />
+        </Sequence>
+    </BehaviorTree>
+
+</root>

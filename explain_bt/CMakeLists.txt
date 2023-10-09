@@ -14,6 +14,11 @@ find_package(catkin REQUIRED COMPONENTS
 
 find_package(Boost REQUIRED system filesystem date_time thread)
 
+add_message_files(
+  FILES
+  Explanations.msg
+)
+
 ## Generate services in the 'srv' folder
 add_service_files(
   FILES
@@ -47,6 +52,7 @@ include_directories(
 add_library(${PROJECT_NAME}
   src/BehaviorTracker.cpp
   src/ExplainableBT.cpp
+  src/ExplainableBTController.cpp
   src/utils/utils.cpp
 )
 target_link_libraries(${PROJECT_NAME} ${catkin_LIBRARIES} ${Boost_LIBRARIES})
@@ -67,6 +73,7 @@ add_executable(
   examples/example_bt.cpp
   src/BehaviorTracker.cpp
   src/ExplainableBT.cpp
+  src/ExplainableBTController.cpp
   src/utils/utils.cpp
 )
 add_dependencies(example_bt ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})

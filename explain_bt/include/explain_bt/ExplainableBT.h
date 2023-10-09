@@ -5,6 +5,7 @@
 #include <stdexcept>
 #include <behaviortree_cpp/bt_factory.h>
 #include "explain_bt/Explain.h"
+#include "explain_bt/Explanations.h"
 #include <boost/algorithm/string/predicate.hpp> // starts_with
 #include "explain_bt/BehaviorTracker.h"
 #include "explain_bt/utils/utils.h"
@@ -57,21 +58,6 @@ public:
     void halt();
 
     /**
-     * @brief Callback function to generate explanations.
-     * 
-     * This method is called as a callback to handle explain queries
-     * from external entities. It generates explanations based on the
-     * input query and returns the response with the explanation.
-     * 
-     * @param req The input query for the explanation.
-     * @param res The response containing the generated explanation.
-     * @return bool True if the explanation is generated successfully, false otherwise.
-     */
-    bool explain_callback(explain_bt::Explain::Request &req, explain_bt::Explain::Response &res);
-
-private:
-
-    /**
      * @brief Handle the explanation for "What are you doing?" query.
      */
     std::string handleWhatAreYouDoing();
@@ -113,6 +99,8 @@ private:
     std::string handleWhatAreCurrentPreConditions();
 
     std::string handleWhatAreCurrentPostConditions();
+
+private:
 
     BT::Tree &tree;
     BehaviorTracker behavior_tracker;

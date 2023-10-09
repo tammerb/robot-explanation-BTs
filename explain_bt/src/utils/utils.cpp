@@ -14,9 +14,6 @@ namespace XBT
             p = p->getParent(); // Traverse up the tree until a parent with a different name is found
         }
 
-        // std cout debug statement
-        std::cout << p << std::endl;
-
         return p;
     }
 

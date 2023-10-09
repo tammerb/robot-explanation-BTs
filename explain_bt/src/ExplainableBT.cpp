@@ -154,8 +154,6 @@ namespace XBT
         BT::TreeNode *p = running_node->getParent();
         while (p != nullptr)
         {
-            ROS_INFO_STREAM(p->short_description());
-
             bool is_fallback_node = (dynamic_cast<BT::FallbackNode *>(p) != nullptr);
             if (is_fallback_node)
             {
@@ -163,7 +161,6 @@ namespace XBT
                 // Fallback node
                 //
                 fallback_node = dynamic_cast<BT::FallbackNode *>(p);
-                ROS_INFO_STREAM("Fallback node found: " << fallback_node->short_description());
                 if (fallback_node->child(0)->status() == BT::NodeStatus::FAILURE)
                 {
                     is_wrong = true;
@@ -204,7 +201,6 @@ namespace XBT
             if (is_retry_node)
             {
                 auto retry_node = dynamic_cast<BT::RetryNode *>(p);
-                ROS_INFO_STREAM("Retry node found: " << retry_node->short_description());
 
                 if (retry_node->is_retrying())
                 {
@@ -258,7 +254,6 @@ namespace XBT
                 if (is_retry_node)
                 {
                     auto retry_node = dynamic_cast<BT::RetryNode *>(p);
-                    ROS_INFO_STREAM("Retry node found: " << retry_node->short_description());
 
                     if (retry_node->is_retrying())
                     {
@@ -410,68 +405,6 @@ namespace XBT
         }
 
         return answer;
-    }
-
-    bool ExplainableBT::explain_callback(explain_bt::Explain::Request &req, explain_bt::Explain::Response &res)
-    {
-        uint8_t question = req.question;
-        std::string answer;
-
-        switch (question)
-        {
-        case explain_bt::ExplainRequest::WHAT_ARE_YOU_DOING:
-            ROS_INFO_STREAM("Q: what are you doing?");
-            answer = handleWhatAreYouDoing();
-            break;
-        case explain_bt::ExplainRequest::WHY_ARE_YOU_DOING_THIS:
-            ROS_INFO_STREAM("Q: why are you doing this?");
-            answer = handleWhyAreYouDoing();
-            break;
-        case explain_bt::ExplainRequest::WHAT_IS_YOUR_SUBGOAL:
-            ROS_INFO_STREAM("Q: what is your subgoal?");
-            answer = handleWhatIsYourSubgoal();
-            break;
-        case explain_bt::ExplainRequest::HOW_DO_YOU_ACHIEVE_YOUR_SUBGOAL:
-            ROS_INFO_STREAM("Q: how do you achieve your subgoal?");
-            answer = handleHowDoYouAchieveYourSubgoal();
-            break;
-        case explain_bt::ExplainRequest::WHAT_IS_YOUR_GOAL:
-            ROS_INFO_STREAM("Q: what is your goal?");
-            answer = handleWhatIsYourGoal();
-            break;
-        case explain_bt::ExplainRequest::HOW_DO_YOU_ACHIEVE_YOUR_GOAL:
-            ROS_INFO_STREAM("Q: how do you achieve your goal?");
-            answer = handleHowDoYouAchieveYourGoal();
-            break;
-        case explain_bt::ExplainRequest::WHAT_WENT_WRONG:
-            ROS_INFO_STREAM("Q: what went wrong?");
-            answer = handleWhatWentWrong();
-            break;
-        case explain_bt::ExplainRequest::WHAT_IS_NEXT_ACTION_IF_SUCCESS:
-            ROS_INFO_STREAM("Q: what is your next action if you succeed?");
-            answer = handleWhatIsNextActionIfSuccess();
-            break;
-        case explain_bt::ExplainRequest::WHAT_IS_NEXT_ACTION_IF_FAIL:
-            ROS_INFO_STREAM("Q: what is your next action if you fail?");
-            answer = handleWhatIsNextActionIfFail();
-            break;
-        case explain_bt::ExplainRequest::WHAT_ARE_CURRENT_PRE_CONDITIONS:
-            ROS_INFO_STREAM("Q: what are your current pre conditions?");
-            answer = handleWhatAreCurrentPreConditions();
-            break;
-        case explain_bt::ExplainRequest::WHAT_ARE_CURRENT_POST_CONDITIONS:
-            ROS_INFO_STREAM("Q: what are your current post conditions?");
-            answer = handleWhatAreCurrentPostConditions();
-            break;
-        default:
-            ROS_INFO_STREAM("Q: " << question << " is not a valid question.");
-            answer = "Sorry, I don't understand that question.";
-            break;
-        }
-
-        ROS_INFO_STREAM("A: " << answer);
-        res.answer = answer;
-        return true;
     }
 
 } // namespace XBT

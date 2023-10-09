@@ -1,0 +1,11 @@
+string what_are_you_doing
+string why_are_you_doing_this
+string what_is_your_subgoal
+string how_do_you_achieve_your_subgoal
+string what_is_your_goal
+string how_do_you_achieve_your_goal
+string what_went_wrong
+string what_is_next_action_if_success
+string what_is_next_action_if_fail
+string what_are_current_pre_conditions
+string what_are_current_post_conditions

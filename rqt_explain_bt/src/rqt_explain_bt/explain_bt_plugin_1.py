@@ -3,18 +3,12 @@ import rospy
 import rospkg
 import functools
 
-
 from qt_gui.plugin import Plugin
-from python_qt_binding import loadUi, QtGui
+from python_qt_binding import loadUi
 from python_qt_binding.QtWidgets import QWidget
-from python_qt_binding.QtGui import QPixmap
-from python_qt_binding.QtCore import Qt
 
 from explain_bt.srv import Explain, ExplainRequest
 from std_srvs.srv import Empty, EmptyRequest
-from cv_bridge import CvBridge
-from sensor_msgs.msg import Image
-import cv2
 
 class ExplainBTPlugin(Plugin):
     def __init__(self, context):
@@ -59,12 +53,6 @@ class ExplainBTPlugin(Plugin):
         self._widget.button_stop.clicked[bool].connect(functools.partial(self._handle_empty_service, service_name='/stop_tree'))
         self._widget.button_reset.clicked[bool].connect(functools.partial(self._handle_empty_service, service_name='/reset_tree'))
 
-        self._bridge = CvBridge()
-        self._image_sub = rospy.Subscriber('/tag_detections_image', Image, self._handle_image_update)
-
-        self._image_label_width = self._widget.image_label.width()
-        self._image_label_height = self._widget.image_label.height()
-
         # Show _widget.windowTitle on left-top of each plugin (when 
         # it's set in _widget). This is useful when you open multiple 
         # plugins at once. Also if you open multiple instances of your 
@@ -95,21 +83,6 @@ class ExplainBTPlugin(Plugin):
         except rospy.ServiceException as e:
             print("Service call failed: %s"%e)
             return
-
-    def _handle_image_update(self, img_msg):
-        cv_img = self._bridge.imgmsg_to_cv2(img_msg, desired_encoding='passthrough')
-        qt_img = self.convert_cv_qt(cv_img)
-        self._widget.image_label.setPixmap(qt_img)
-
-    def convert_cv_qt(self, cv_img):
-        """Convert from an opencv image to QPixmap"""
-        # rgb_image = cv2.cvtColor(cv_img, cv2.COLOR_BGR2RGB)
-        rgb_image = cv_img
-        h, w, ch = rgb_image.shape
-        bytes_per_line = ch * w
-        convert_to_Qt_format = QtGui.QImage(rgb_image.data, w, h, bytes_per_line, QtGui.QImage.Format_RGB888)
-        p = convert_to_Qt_format.scaled(self._image_label_width, self._image_label_height, Qt.KeepAspectRatio)
-        return QPixmap.fromImage(p)
 
     def shutdown_plugin(self):
         # TODO unregister all publishers here

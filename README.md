@@ -31,10 +31,10 @@ To install the necessary dependencies and set up your environment, follow these 
 
 1. Verify that you are running Ubuntu 20.04 and have ROS Noetic installed. You can find installation instructions for ROS Noetic [here](https://wiki.ros.org/noetic/Installation/Ubuntu).
 
-2. Install `python3-catkin-tools` by running the following command:
+2. Install catkin the ROS build system:
 
    ```bash
-   sudo apt install python3-catkin-tools
+   sudo apt install ros-noetic-catkin python3-catkin-tools
    ```
 
 3. Create a ROS workspace. In your terminal, execute the following commands:

@@ -77,7 +77,6 @@ namespace XBT
         return answer;
     }
 
-    // TODO: Logic doesn't make sense with fallback
     std::string ExplainableBT::handleHowDoYouAchieveYourSubgoal()
     {
         std::string answer;
@@ -114,7 +113,6 @@ namespace XBT
         return answer;
     }
 
-    // TODO: Logic doesn't make sense with fallback
     std::string ExplainableBT::handleHowDoYouAchieveYourGoal()
     {
         std::string answer;

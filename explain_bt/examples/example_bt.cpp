@@ -2,100 +2,95 @@
 #include <behaviortree_cpp/bt_factory.h>
 #include <explain_bt/ExplainableBTController.h>
 
-using namespace BT;
-using namespace std::chrono;
-
-// Example of Asynchronous node that uses StatefulActionNode as base class
+// Define a Dummy Action Node for testing purposes.
 class DummyAction : public BT::StatefulActionNode
 {
-  public:
-    DummyAction(const std::string& name, const BT::NodeConfig& config)
+public:
+  DummyAction(const std::string &name, const BT::NodeConfig &config)
       : BT::StatefulActionNode(name, config)
-    {}
+  {
+  }
 
-    static BT::PortsList providedPorts()
+  // Specify the input ports for this action node.
+  static BT::PortsList providedPorts()
+  {
+    return {
+        BT::InputPort<bool>("succeed", false, "Whether to succeed or fail"),
+        BT::InputPort<int>("msec", 0, "Amount of milliseconds to sleep")};
+  }
+
+  // Method invoked when the action starts.
+  BT::NodeStatus onStart() override
+  {
+    bool succeed;
+    int msec;
+
+    getInput("succeed", succeed);
+    getInput("msec", msec);
+
+    if (succeed)
     {
-      // amount of milliseconds that we want to sleep
-      return{ InputPort<bool>("succeed"), BT::InputPort<int>("msec") };
+      return_status_ = BT::NodeStatus::SUCCESS;
+    }
+    else
+    {
+      return_status_ = BT::NodeStatus::FAILURE;
     }
 
-    NodeStatus onStart() override
+    if (msec <= 0)
     {
-      bool succeed = false;
-      int msec = 0;
-      getInput("succeed", succeed);
-      getInput("msec", msec);
-
-      if (succeed)
-      {
-        return_status_ = NodeStatus::SUCCESS;
-      }
-      else
-      {
-        return_status_ = NodeStatus::FAILURE;
-      }
-
-      if( msec <= 0 ) {
-        // No need to go into the RUNNING state
-        return return_status_;
-      }
-      else {
-        // once the deadline is reached, we will return SUCCESS.
-        deadline_ = system_clock::now() + milliseconds(msec);
-        return NodeStatus::RUNNING;
-      }
+      // If no need to run for a specific duration, return the result immediately.
+      return return_status_;
     }
-
-    /// method invoked by an action in the RUNNING state.
-    NodeStatus onRunning() override
+    else
     {
-      if ( system_clock::now() >= deadline_ ) {
-        return return_status_;
-      }
-      else {
-        return NodeStatus::RUNNING;
-      }
+      // Set a deadline for the action to run and return RUNNING.
+      deadline_ = std::chrono::system_clock::now() + std::chrono::milliseconds(msec);
+      return BT::NodeStatus::RUNNING;
     }
+  }
 
-    void onHalted() override
+  // Method invoked while the action is in the RUNNING state.
+  BT::NodeStatus onRunning() override
+  {
+    if (std::chrono::system_clock::now() >= deadline_)
     {
-      // nothing to do here...
-      std::cout << "SleepNode interrupted" << std::endl;
+      return return_status_;
     }
+    else
+    {
+      return BT::NodeStatus::RUNNING;
+    }
+  }
 
-  private:
-    system_clock::time_point deadline_;
-    BT::NodeStatus return_status_;
+  void onHalted() override
+  {
+    // Nothing to do when the action is halted.
+  }
+
+private:
+  std::chrono::system_clock::time_point deadline_;
+  BT::NodeStatus return_status_;
 };
-
-std::string get_xml_filename(ros::NodeHandle &nh, std::string param)
-{
-    // get xml filename from ros parameter server
-    std::string xml_filename;
-    nh.getParam(param, xml_filename);
-    ROS_INFO("Loading XML : %s", xml_filename.c_str());
-    return xml_filename;
-}
 
 int main(int argc, char **argv)
 {
-    // setup ros
-    ros::init(argc, argv, "example_bt");
-    ros::NodeHandle nh;
-    ros::AsyncSpinner spinner(1);
-    spinner.start();
+  // Initialize ROS.
+  ros::init(argc, argv, "example_bt");
+  ros::NodeHandle nh;
 
-    // create bt factory
-    BT::BehaviorTreeFactory factory;
-    factory.registerNodeType<DummyAction>("DummyAction");
+  // Create a Behavior Tree Factory.
+  BT::BehaviorTreeFactory factory;
+  factory.registerNodeType<DummyAction>("DummyAction");
 
-    // create tree from xml files
-    std::string xml_filename = get_xml_filename(nh, "/behavior_tree_xml");
-    auto tree = factory.createTreeFromFile(xml_filename);
-    
-    // create explainable bt controller
-    XBT::ExplainableBTController controller(tree, nh);
-    controller.run();
+  // Create a behavior tree from an XML file.
+  std::string xml_filename;
+  nh.getParam("behavior_tree_xml", xml_filename);
+  auto tree = factory.createTreeFromFile(xml_filename);
 
-    return 0;
+  // Create an Explainable Behavior Tree Controller.
+  XBT::ExplainableBTController controller(tree, nh);
+  controller.run();
+
+  return 0;
 }

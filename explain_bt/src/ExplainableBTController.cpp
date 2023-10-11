@@ -5,6 +5,7 @@ namespace XBT
 
   ExplainableBTController::ExplainableBTController(BT::Tree &tree, ros::NodeHandle &nh) : nh_(nh), running_flag_(false), start_flag_(false)
   {
+    // Create the explainable behavior tree
     xbt_ = std::make_shared<XBT::ExplainableBT>(tree);
 
     // Create ROS services for starting, stopping, and resetting the behavior tree
@@ -51,82 +52,68 @@ namespace XBT
   bool ExplainableBTController::stopTreeCallback(std_srvs::Empty::Request &req, std_srvs::Empty::Response &res)
   {
     running_flag_ = false;
+    start_flag_ = false;
     return true;
   }
 
   // Reset the behavior tree
   bool ExplainableBTController::resetTreeCallback(std_srvs::Empty::Request &req, std_srvs::Empty::Response &res)
   {
+    running_flag_ = false;
+    start_flag_ = false;
     xbt_->halt();
     return true;
   }
 
-  // Explain the behavior tree
+  // service callback for explaining the behavior tree
   bool ExplainableBTController::explainCallback(explain_bt::Explain::Request &req, explain_bt::Explain::Response &res)
   {
-    uint8_t question = req.question;
-    std::string answer;
-
-    switch (question)
+    switch (req.question)
     {
     case explain_bt::ExplainRequest::WHAT_ARE_YOU_DOING:
-      ROS_INFO_STREAM("Q: what are you doing?");
-      answer = xbt_->handleWhatAreYouDoing();
+      res.answer = xbt_->handleWhatAreYouDoing();
       break;
     case explain_bt::ExplainRequest::WHY_ARE_YOU_DOING_THIS:
-      ROS_INFO_STREAM("Q: why are you doing this?");
-      answer = xbt_->handleWhyAreYouDoing();
+      res.answer = xbt_->handleWhyAreYouDoing();
       break;
     case explain_bt::ExplainRequest::WHAT_IS_YOUR_SUBGOAL:
-      ROS_INFO_STREAM("Q: what is your subgoal?");
-      answer = xbt_->handleWhatIsYourSubgoal();
+      res.answer = xbt_->handleWhatIsYourSubgoal();
       break;
     case explain_bt::ExplainRequest::HOW_DO_YOU_ACHIEVE_YOUR_SUBGOAL:
-      ROS_INFO_STREAM("Q: how do you achieve your subgoal?");
-      answer = xbt_->handleHowDoYouAchieveYourSubgoal();
+      res.answer = xbt_->handleHowDoYouAchieveYourSubgoal();
       break;
     case explain_bt::ExplainRequest::WHAT_IS_YOUR_GOAL:
-      ROS_INFO_STREAM("Q: what is your goal?");
-      answer = xbt_->handleWhatIsYourGoal();
+      res.answer = xbt_->handleWhatIsYourGoal();
       break;
     case explain_bt::ExplainRequest::HOW_DO_YOU_ACHIEVE_YOUR_GOAL:
-      ROS_INFO_STREAM("Q: how do you achieve your goal?");
-      answer = xbt_->handleHowDoYouAchieveYourGoal();
+      res.answer = xbt_->handleHowDoYouAchieveYourGoal();
       break;
     case explain_bt::ExplainRequest::WHAT_WENT_WRONG:
-      ROS_INFO_STREAM("Q: what went wrong?");
-      answer = xbt_->handleWhatWentWrong();
+      res.answer = xbt_->handleWhatWentWrong();
       break;
     case explain_bt::ExplainRequest::WHAT_IS_NEXT_ACTION_IF_SUCCESS:
-      ROS_INFO_STREAM("Q: what is your next action if you succeed?");
-      answer = xbt_->handleWhatIsNextActionIfSuccess();
+      res.answer = xbt_->handleWhatIsNextActionIfSuccess();
       break;
     case explain_bt::ExplainRequest::WHAT_IS_NEXT_ACTION_IF_FAIL:
-      ROS_INFO_STREAM("Q: what is your next action if you fail?");
-      answer = xbt_->handleWhatIsNextActionIfFail();
+      res.answer = xbt_->handleWhatIsNextActionIfFail();
       break;
     case explain_bt::ExplainRequest::WHAT_ARE_CURRENT_PRE_CONDITIONS:
-      ROS_INFO_STREAM("Q: what are your current pre conditions?");
-      answer = xbt_->handleWhatAreCurrentPreConditions();
+      res.answer = xbt_->handleWhatAreCurrentPreConditions();
       break;
     case explain_bt::ExplainRequest::WHAT_ARE_CURRENT_POST_CONDITIONS:
-      ROS_INFO_STREAM("Q: what are your current post conditions?");
-      answer = xbt_->handleWhatAreCurrentPostConditions();
+      res.answer = xbt_->handleWhatAreCurrentPostConditions();
       break;
     default:
-      ROS_INFO_STREAM("Q: " << question << " is not a valid question.");
-      answer = "Sorry, I don't understand that question.";
+      res.answer = "Sorry, I don't understand that question.";
       break;
     }
-
-    res.answer = answer;
     return true;
   }
 
+  // Generate and publish explanations
   void ExplainableBTController::publishExplanations()
   {
     explain_bt::Explanations explanations_msg;
-
     explanations_msg.what_are_you_doing = xbt_->handleWhatAreYouDoing();
     explanations_msg.why_are_you_doing_this = xbt_->handleWhyAreYouDoing();
     explanations_msg.what_is_your_subgoal = xbt_->handleWhatIsYourSubgoal();

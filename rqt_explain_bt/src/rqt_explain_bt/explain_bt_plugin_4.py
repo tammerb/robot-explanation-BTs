@@ -74,7 +74,7 @@ class ExplainBTPlugin(Plugin):
             vertical_layout.addWidget(label)
             vertical_layout.addWidget(text_browser)
             # Add the vertical layout to the grid
-            grid_layout.addLayout(vertical_layout, i // 3, i % 3)
+            grid_layout.addLayout(vertical_layout, i // 4, i % 4)
 
         # Add the button layout and grid layout to the main vertical layout
         layout.addLayout(button_layout)

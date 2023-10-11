@@ -4,33 +4,20 @@
     <BehaviorTree ID="MainTree">
         <Sequence name="replace battery">
             <SubTree ID="OpenCover" name="open battery cover" item="battery" />
-            <SubTree ID="PickItem" name="pick battery" item="battery" />
+            <DummyAction name="remove old battery" succeed="true" msec="3000" />
+            <DummyAction name="insert new battery" succeed="true" msec="3000" />
         </Sequence>
     </BehaviorTree>
 
     <BehaviorTree ID="OpenCover">
-        <Fallback name="open or break {item} cover">
-            <DummyAction
-                name="lift {item} cover"
-                succeed="false"
-                msec="3000"
-                _onSuccess="open:=true"
-                _onFailure="open:=false" 
-            />
+        <Sequence name="open {item} cover">
+            <Script code="cover_is_open:=false" name="get {item} cover state"/>
             <DummyAction 
-                name="break open {item} cover" 
+                name="lift {item} cover"
                 succeed="true" 
                 msec="3000" 
-                _skipIf="open"
+                _skipIf="cover_is_open"
             />
-        </Fallback>
-    </BehaviorTree>
-
-    <BehaviorTree ID="PickItem">
-        <Sequence name="pick {item}">
-            <DummyAction name="approach {item}" succeed="true" msec="3000" />
-            <DummyAction name="grasp {item}" succeed="true" msec="3000" />
-            <DummyAction name="retreat" succeed="true" msec="3000" />
         </Sequence>
     </BehaviorTree>
 

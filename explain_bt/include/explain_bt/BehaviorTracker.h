@@ -31,25 +31,6 @@ public:
      */
     BT::TreeNode* get_running_node();
 
-    /**
-     * @brief Get the currently running node that has a different control parent
-     *        (a parent node with a different name) in the behavior tree.
-     * @return Pointer to the currently running node with a different control parent.
-     */
-    BT::TreeNode* get_running_node_different_control_parent();
-
-    /**
-     * @brief Get the overall goal node (root node) of the behavior tree.
-     * @return Pointer to the overall goal node.
-     */
-    BT::TreeNode* get_overall_goal_node();
-
-    /**
-     * @brief Get the parent subtree node of the currently running node in the behavior tree.
-     * @return Pointer to the parent subtree node.
-     */
-    BT::TreeNode* get_tree_parent();
-
 private:
     const BT::Tree& tree; ///< Reference to the behavior tree being tracked
     uint16_t ticking_node_uid_; ///< UID of the currently running node in the behavior tree

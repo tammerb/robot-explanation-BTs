@@ -4,7 +4,7 @@ This repository is a fork of the original project available at [uml-robotics/rob
 
 ## Project Overview
 
-In the context of this paper, we have introduced an extension to [uml-robotics/robot-explanation-BTs](https://github.com/uml-robotics/robot-explanation-BTs) for generating explanations using behavior trees (BTs). Our contributions to this project include:
+In the context of this paper, we have introduced an extension to [an existing codebase](https://github.com/uml-robotics/robot-explanation-BTs) for generating explanations using behavior trees (BTs). Our contributions to this project include:
 
 1. **Next Action Explanations**: We've created algorithms that allow users to ask about what an agent's next action will be in case of success or failure in their current action.
 

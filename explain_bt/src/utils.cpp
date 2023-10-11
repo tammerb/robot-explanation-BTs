@@ -1,4 +1,4 @@
-#include "explain_bt/utils/utils.h"
+#include "explain_bt/utils.h"
 
 namespace XBT
 {

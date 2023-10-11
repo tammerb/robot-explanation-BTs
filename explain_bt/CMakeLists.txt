@@ -53,7 +53,7 @@ add_library(${PROJECT_NAME}
   src/BehaviorTracker.cpp
   src/ExplainableBT.cpp
   src/ExplainableBTController.cpp
-  src/utils/utils.cpp
+  src/utils.cpp
 )
 target_link_libraries(${PROJECT_NAME} ${catkin_LIBRARIES} ${Boost_LIBRARIES})
 install(
@@ -74,7 +74,7 @@ add_executable(
   src/BehaviorTracker.cpp
   src/ExplainableBT.cpp
   src/ExplainableBTController.cpp
-  src/utils/utils.cpp
+  src/utils.cpp
 )
 add_dependencies(example_bt ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
 target_link_libraries(example_bt ${catkin_LIBRARIES})

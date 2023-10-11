@@ -3,7 +3,7 @@
 #include <ros/ros.h>
 #include <behaviortree_cpp/bt_factory.h>
 #include "explain_bt/BehaviorTracker.h"
-#include "explain_bt/utils/utils.h"
+#include "explain_bt/utils.h"
 
 namespace XBT {
 

@@ -96,11 +96,11 @@ namespace XBT
                      p->short_description() +
                      "\", I need to do " +
                      std::to_string(steps.size()) +
-                     " steps. ";
+                     " steps.\n";
 
             for (int i = 0; i < steps.size(); ++i)
             {
-                answer += std::to_string(i + 1) + ". " + steps.at(i)->short_description() + ". ";
+                answer += std::to_string(i + 1) + ". " + steps.at(i)->short_description() + ".\n";
             }
         }
         return answer;
@@ -128,11 +128,11 @@ namespace XBT
                  root->short_description() +
                  "\", I need to do " +
                  std::to_string(steps.size()) +
-                 " steps. ";
+                 " steps.\n";
 
         for (int i = 0; i < steps.size(); ++i)
         {
-            answer += std::to_string(i + 1) + ". " + steps.at(i)->short_description() + ". ";
+            answer += std::to_string(i + 1) + ". " + steps.at(i)->short_description() + ".\n";
         }
         return answer;
     }

@@ -131,6 +131,16 @@ namespace XBT
                 // Propagate upwards since succeed on subtree
                 return get_next_node_on_success(p);
             }
+            else if (dynamic_cast<const BT::ForceSuccessNode *>(p))
+            {
+                // Propagate upwards since succeed on subtree
+                return get_next_node_on_success(p);
+            }
+            else if (dynamic_cast<const BT::ForceFailureNode *>(p))
+            {
+                // Propagate upwards since succeed on subtree
+                return get_next_node_on_fail(p);
+            }
             else
             {
                 // Algorithm won't work with decorator nodes other than inverter, repeat, retry, and subtree, throw an error
@@ -221,6 +231,16 @@ namespace XBT
             else if (dynamic_cast<const BT::SubTreeNode *>(p))
             {
                 // Propagate upwards since failure on subtree
+                return get_next_node_on_fail(p);
+            }
+            else if (dynamic_cast<const BT::ForceSuccessNode *>(p))
+            {
+                // Propagate upwards since succeed on subtree
+                return get_next_node_on_success(p);
+            }
+            else if (dynamic_cast<const BT::ForceFailureNode *>(p))
+            {
+                // Propagate upwards since succeed on subtree
                 return get_next_node_on_fail(p);
             }
             else

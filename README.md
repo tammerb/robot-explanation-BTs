@@ -47,8 +47,8 @@ To install the necessary dependencies and set up your environment, follow these 
 4. Clone the required repositories:
 
    ```bash
-   git clone -b v4.3 https://github.com/ian-chuang/BehaviorTree.CPP.git
-   git clone https://github.com/ian-chuang/robot-explanation-BTs.git
+   git clone -b v4.3 https://github.com/<anonymous>/BehaviorTree.CPP.git
+   git clone https://github.com/<anonymous>/robot-explanation-BTs.git
    ```
 
 5. Install ROS dependencies for the cloned packages:

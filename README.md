@@ -86,16 +86,16 @@ Feel free to explore and experiment with the behavior tree located at `explain_b
 ## Algorithms
 
 <p align="center">
-  <img src="images/algorithm1.png" width="200"  alt="Algorithm 1">
-  <img src="images/algorithm2.png" width="200"  alt="Algorithm 4">
+  <img src="images/algorithm1.png" width="300"  alt="Algorithm 1">
+  <img src="images/algorithm2.png" width="300"  alt="Algorithm 4">
 </p>
 
 <p align="center">
-  <img src="images/algorithm3.png" width="200"  alt="Algorithm 2">
-  <img src="images/algorithm4.png" width="200"  alt="Algorithm 5">
+  <img src="images/algorithm3.png" width="300"  alt="Algorithm 2">
+  <img src="images/algorithm4.png" width="300"  alt="Algorithm 5">
 </p>
 
 <p align="center">
-  <img src="images/algorithm5.png" width="200"  alt="Algorithm 3">
-  <img src="images/algorithm6.png" width="200"  alt="Algorithm 6">
+  <img src="images/algorithm5.png" width="300"  alt="Algorithm 3">
+  <img src="images/algorithm6.png" width="300"  alt="Algorithm 6">
 </p>

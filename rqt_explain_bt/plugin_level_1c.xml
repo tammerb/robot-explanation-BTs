@@ -1,0 +1,18 @@
+<library path="src">
+  <class name="ExplainBTPluginLevel1c" type="rqt_explain_bt.explain_bt_plugin_level_1c.ExplainBTPlugin"
+    base_class_type="rqt_gui_py::Plugin">
+    <description>
+      A Python GUI for explainable behavior trees.
+    </description>
+    <qtgui>
+      <group>
+        <label>Explain BT</label>
+        <icon type="theme">folder</icon>
+        <statustip>Plugins related to explainable behavior trees.</statustip>
+      </group>
+      <label>Explain BT Plugin Level 1C</label>
+      <icon type="theme">mail-read</icon>
+      <statustip>A Python GUI for explainable behavior trees.</statustip>
+    </qtgui>
+  </class>
+</library>

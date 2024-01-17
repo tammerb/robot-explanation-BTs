@@ -18,5 +18,11 @@
     <rqt_gui plugin="${prefix}/plugin_2.xml"/>
     <rqt_gui plugin="${prefix}/plugin_3.xml"/>
     <rqt_gui plugin="${prefix}/plugin_4.xml"/> 
+    <rqt_gui plugin="${prefix}/plugin_5.xml"/> 
+    <rqt_gui plugin="${prefix}/plugin_level_1a.xml"/>
+    <rqt_gui plugin="${prefix}/plugin_level_1b.xml"/>
+    <rqt_gui plugin="${prefix}/plugin_level_1c.xml"/>
+    <rqt_gui plugin="${prefix}/plugin_level_2.xml"/>
+    <rqt_gui plugin="${prefix}/plugin_level_3.xml"/>
   </export>
 </package>

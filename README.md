@@ -4,7 +4,7 @@ This repository is a fork of the original project available at [uml-robotics/rob
 
 ## Project Overview
 
-In the context of this paper, we have introduced an extension to [an existing codebase](https://github.com/uml-robotics/robot-explanation-BTs) for generating explanations using behavior trees (BTs). Our contributions to this project include:
+In the context of this paper, we have introduced an extension to [an existing codebase](https://github.com/ian-chuang/BehaviorTree.CPP) for generating explanations using behavior trees (BTs). Our contributions to this project include:
 
 1. **Next Action Explanations**: We've created algorithms that allow users to ask about what an agent's next action will be in case of success or failure in their current action.
 
@@ -82,3 +82,20 @@ roslaunch explain_bt example_bt.launch
 Once executed, the GUI will be displayed. Click the "Start" button at the top left of the GUI to begin the behavior tree execution. The GUI will provide real-time generated explanations while the behavior tree is running. If needed, you can restart the behavior tree by clicking "Reset" and "Start."
 
 Feel free to explore and experiment with the behavior tree located at `explain_bt/bt_xml/example_bt.xml`.
+
+## Algorithms
+
+<p align="center">
+  <img src="images/algorithm1.png" width="300"  alt="Algorithm 1">
+  <img src="images/algorithm2.png" width="300"  alt="Algorithm 4">
+</p>
+
+<p align="center">
+  <img src="images/algorithm3.png" width="300"  alt="Algorithm 2">
+  <img src="images/algorithm4.png" width="300"  alt="Algorithm 5">
+</p>
+
+<p align="center">
+  <img src="images/algorithm5.png" width="300"  alt="Algorithm 3">
+  <img src="images/algorithm6.png" width="300"  alt="Algorithm 6">
+</p>

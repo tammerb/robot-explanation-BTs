@@ -343,23 +343,23 @@ namespace XBT
                  n->short_description() +
                  "\", I have " +
                  std::to_string(preconditions.size()) +
-                 " preconditions. ";
+                 " preconditions.\n";
 
         for (const auto &[cond_id, script] : preconditions)
         {
             switch (cond_id)
             {
             case BT::PreCond::SUCCESS_IF:
-                answer += "Skip and succeed if " + script + " is true. ";
+                answer += "Skip and succeed if " + script + " is true.\n";
                 break;
             case BT::PreCond::FAILURE_IF:
-                answer += "Skip and fail if " + script + " is true. ";
+                answer += "Skip and fail if " + script + " is true.\n";
                 break;
             case BT::PreCond::SKIP_IF:
-                answer += "Skip if " + script + " is true. ";
+                answer += "Skip if " + script + " is true.\n";
                 break;
             case BT::PreCond::WHILE_TRUE:
-                answer += "Skip while " + script + " is true. ";
+                answer += "Skip while " + script + " is true.";
                 break;
             }
         }
@@ -381,20 +381,20 @@ namespace XBT
                  n->short_description() +
                  "\", I have " +
                  std::to_string(postconditions.size()) +
-                 " postconditions. ";
+                 " postconditions.\n";
 
         for (const auto &[cond_id, script] : postconditions)
         {
             switch (cond_id)
             {
             case BT::PostCond::ON_SUCCESS:
-                answer += "If successful, " + script + ". ";
+                answer += "If successful, " + script + ".\n";
                 break;
             case BT::PostCond::ON_FAILURE:
-                answer += "If failed, " + script + ". ";
+                answer += "If failed, " + script + ".\n";
                 break;
             case BT::PostCond::ALWAYS:
-                answer += "Always " + script + ". ";
+                answer += "Always " + script + ".\n";
                 break;
             case BT::PostCond::ON_HALTED:
                 answer += "If halted, " + script + ". ";

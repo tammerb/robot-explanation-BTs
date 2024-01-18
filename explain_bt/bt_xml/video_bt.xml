@@ -1,0 +1,25 @@
+<root BTCPP_format="4" main_tree_to_execute="MainTree">
+
+
+    <BehaviorTree ID="MainTree">
+        <Sequence name="inspect drawer">
+
+            <Fallback name="open drawer if necessary">
+
+                <DummyAction name="check if drawer is open" succeed="false" msec="3000" />
+
+
+                <DummyAction name="open drawer" succeed="true" msec="3000" />
+            
+            </Fallback>
+
+            <Script name="detect tools" code="tools_missing:=false"/>
+
+            <DummyAction name="collect tools" succeed="true" msec="3000" _skipIf="tools_missing"/>
+
+            <DummyAction name="close drawer" succeed="true" msec="3000"  _onSuccess="drawer_is_open:=false" _onFailure="drawer_is_open:=true"/>
+
+        </Sequence>
+    </BehaviorTree>
+
+</root>

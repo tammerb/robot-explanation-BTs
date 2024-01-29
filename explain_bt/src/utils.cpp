@@ -41,16 +41,29 @@ namespace XBT
         auto visitor = [&p, &steps](BT::TreeNode *node) -> bool
         {
             if (
-                node->name().empty() || 
-                node->short_description() == p->short_description() || 
-                (node->type() == BT::NodeType::DECORATOR && !dynamic_cast<const BT::ExplainNode *>(node)))
-            {
-                return false;
-            }
-            else
+                !node->name().empty() &&
+                node->short_description() != p->short_description() &&
+                (
+                    node->type() != BT::NodeType::DECORATOR || 
+                    dynamic_cast<const BT::ExplainNode *>(node)
+                )
+            )
             {
                 steps.emplace_back(node);
                 return true;
+            }
+            else if (
+                dynamic_cast<const BT::ExplainNode *>(node) && 
+                (
+                    node->name().empty() ||
+                    node->short_description() == p->short_description() 
+                )
+            ) 
+            {
+                return true;
+            }
+            else {
+                return false;
             }
         };
 

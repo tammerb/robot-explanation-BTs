@@ -34,9 +34,16 @@ namespace XBT
     {
         std::vector<BT::TreeNode *> steps;
 
+        if (dynamic_cast<const BT::ExplainNode *>(p)) {
+            return steps;
+        }
+
         auto visitor = [&p, &steps](BT::TreeNode *node) -> bool
         {
-            if (node->name().empty() || node->short_description() == p->short_description() || node->type() == BT::NodeType::DECORATOR)
+            if (
+                node->name().empty() || 
+                node->short_description() == p->short_description() || 
+                (node->type() == BT::NodeType::DECORATOR && !dynamic_cast<const BT::ExplainNode *>(node)))
             {
                 return false;
             }

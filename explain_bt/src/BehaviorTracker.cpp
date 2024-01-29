@@ -24,6 +24,20 @@ namespace XBT
             if (node_visiting->UID() == ticking_node_uid_) { // Check if the UID matches the currently running node
                 running_node = node_visiting; // Store the pointer to the running node
             } });
-        return running_node;
+
+        auto explain_node = running_node;
+        while (
+            explain_node != nullptr &&
+            !dynamic_cast<const BT::ExplainNode *>(explain_node))
+        {
+            explain_node = explain_node->getParent(); // Traverse up until your parent is a subtree
+        }
+
+        if (explain_node) {
+            return explain_node;
+        }
+        else {
+            return running_node;
+        }
     }
 } // namespace XBT

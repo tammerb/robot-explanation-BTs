@@ -139,6 +139,7 @@ namespace XBT
 
     std::string ExplainableBT::handleWhatWentWrong()
     {
+
         std::string answer;
         BT::TreeNode *running_node = behavior_tracker.get_running_node();
 
@@ -166,20 +167,23 @@ namespace XBT
 
                     answer = "I could not " + fallback_node->short_description() + " because ";
 
+                    // std::cout << "Fallback node: "<< std::endl;
+
                     // find the failed child
                     const BT::TreeNode *failed_child = nullptr;
                     BT::applyRecursiveVisitorSelectively(fallback_node, [&failed_child](const BT::TreeNode *node) -> bool
                                                          {
-                            if (node->has_failed() && (
-                                        node->type() == BT::NodeType::CONDITION || 
-                                        node->type() == BT::NodeType::ACTION || 
-                                        node->type() == BT::NodeType::DECORATOR // Account for invert
-                                    )
-                                ) {
+                            if (node->has_failed()) {
                                 failed_child = node;
                                 return true;
                             }
                             return false; });
+
+                    // std::cout << "Failed child: " << std::endl;
+
+                    failed_child = XBT::get_node_to_explain(failed_child);
+
+                    // std::cout << "Failed child to explain: " << failed_child->short_description() << std::endl;
 
                     if (failed_child->getParent() != nullptr)
                     {
@@ -198,43 +202,57 @@ namespace XBT
             bool is_retry_node = (dynamic_cast<BT::RetryNode *>(p) != nullptr);
             if (is_retry_node)
             {
+
                 auto retry_node = dynamic_cast<BT::RetryNode *>(p);
 
                 if (retry_node->is_retrying())
                 {
+
                     is_wrong = true;
 
                     // check if have non-null parent
                     BT::TreeNode *rp = retry_node->getParent();
-                    while (rp == nullptr)
-                    {
-                        rp = rp->getParent();
-                    }
 
-                    if (rp != nullptr)
-                    {
-                        answer = "I am retrying for attempt " + std::to_string(retry_node->n_th_retry()) + " to " + rp->short_description() + ". ";
+                    // lol wut this doesn't make sense
+                    // while (rp != nullptr)
+                    // {
+                    //     rp = rp->getParent();
+                    // }
+
+                    // if (rp != nullptr)
+                    // {
+                        answer = "I am retrying for attempt " + std::to_string(retry_node->n_th_retry()) + " to " + retry_node->short_description() + ". ";
+
+                        // std::cout << "Retry node: " << std::endl;
 
                         // find the failed child
                         const BT::TreeNode *failed_child;
                         BT::applyRecursiveVisitorSelectively(retry_node, [&failed_child](const BT::TreeNode *node) -> bool
                                                              {
-                                if (node->has_failed() && (node->type() == BT::NodeType::CONDITION || node->type() == BT::NodeType::ACTION)) {
+                                if (node->has_failed()) {
                                     failed_child = node;
                                     return true;
                                 }
                                 return false; });
 
-                        auto fp = failed_child->getParent();
-                        while (fp->name().empty())
+                        // std::cout << "Failed child: "  << std::endl;
+
+                        failed_child = XBT::get_node_to_explain(failed_child);
+
+                        // std::cout << "Failed child to explain: " << failed_child->short_description() << std::endl;
+
+                        if (failed_child->getParent() != nullptr)
                         {
-                            fp = fp->getParent();
+                            if (failed_child->getParent()->short_description() != retry_node->short_description())
+                            {
+                                answer += "I was unable to " + failed_child->getParent()->short_description() + " as ";
+                            }
                         }
 
-                        answer += "I could not " + fp->short_description() + " because " + failed_child->short_description() + " failed.";
+                        answer += failed_child->short_description() + " failed.";
 
                         break;
-                    }
+                    // }
                 }
             }
             p = p->getParent();
@@ -255,18 +273,7 @@ namespace XBT
 
                     if (retry_node->is_retrying())
                     {
-
-                        // check if have non-null parent
-                        BT::TreeNode *rp = retry_node->getParent();
-                        while (rp == nullptr)
-                        {
-                            rp = rp->getParent();
-                        }
-
-                        if (rp != nullptr)
-                        {
-                            answer += " I am retrying for attempt " + std::to_string(retry_node->n_th_retry()) + " to " + rp->short_description() + ".";
-                        }
+                        answer += " I am retrying for attempt " + std::to_string(retry_node->n_th_retry()) + " to " + retry_node->short_description() + ".";
                     }
                 }
                 p = p->getParent();

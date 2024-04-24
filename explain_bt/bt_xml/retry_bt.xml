@@ -2,11 +2,13 @@
 
     <BehaviorTree ID="MainTree">
         <RetryUntilSuccessful num_attempts="3" name="repeat">
-            <DummyAction
-                name="action"
-                succeed="false"
-                msec="5000"
-            />
+            <Explain name="oops I failed">
+                <DummyAction
+                    name="action"
+                    succeed="false"
+                    msec="1000"
+                />
+            </Explain>
         </RetryUntilSuccessful>
     </BehaviorTree>
 

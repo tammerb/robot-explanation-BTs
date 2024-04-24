@@ -25,19 +25,7 @@ namespace XBT
                 running_node = node_visiting; // Store the pointer to the running node
             } });
 
-        auto explain_node = running_node;
-        while (
-            explain_node != nullptr &&
-            !dynamic_cast<const BT::ExplainNode *>(explain_node))
-        {
-            explain_node = explain_node->getParent(); // Traverse up until your parent is a subtree
-        }
 
-        if (explain_node) {
-            return explain_node;
-        }
-        else {
-            return running_node;
-        }
+        return XBT::get_node_to_explain(running_node); // Return the node to explain
     }
 } // namespace XBT

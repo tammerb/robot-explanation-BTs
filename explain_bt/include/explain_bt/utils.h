@@ -13,5 +13,9 @@ namespace XBT {
     BT::TreeNode* get_next_node_on_success(BT::TreeNode* n);
 
     BT::TreeNode* get_next_node_on_fail(BT::TreeNode* n);
+
+    BT::TreeNode* get_node_to_explain(BT::TreeNode* n);
+
+    const BT::TreeNode* get_node_to_explain(const BT::TreeNode* n);
     
 } // namespace XBT

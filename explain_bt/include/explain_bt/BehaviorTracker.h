@@ -1,6 +1,7 @@
 #pragma once
 
 #include <behaviortree_cpp/loggers/bt_cout_logger.h>
+#include <explain_bt/utils.h>
 
 namespace XBT {
 

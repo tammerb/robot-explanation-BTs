@@ -1,0 +1,28 @@
+<?xml version="1.0"?>
+<package>
+  <name>rqt_explain_bt</name>
+  <version>0.0.0</version>
+  <description>Explainable BT package</description>
+
+  <maintainer email="thbarkouki@ucdavis.edu">Tammer Barkouki</maintainer>
+  <license>MIT</license>
+  
+  <buildtool_depend>catkin</buildtool_depend>
+  <run_depend>rospy</run_depend>
+  <run_depend>rqt_msg</run_depend>
+  <run_depend>rqt_py_common</run_depend>
+  <run_depend>explain_bt</run_depend>
+
+  <export>
+    <rqt_gui plugin="${prefix}/plugin_1.xml"/>
+    <rqt_gui plugin="${prefix}/plugin_2.xml"/>
+    <rqt_gui plugin="${prefix}/plugin_3.xml"/>
+    <rqt_gui plugin="${prefix}/plugin_4.xml"/> 
+    <rqt_gui plugin="${prefix}/plugin_5.xml"/> 
+    <rqt_gui plugin="${prefix}/plugin_level_1a.xml"/>
+    <rqt_gui plugin="${prefix}/plugin_level_1b.xml"/>
+    <rqt_gui plugin="${prefix}/plugin_level_1c.xml"/>
+    <rqt_gui plugin="${prefix}/plugin_level_2.xml"/>
+    <rqt_gui plugin="${prefix}/plugin_level_3.xml"/>
+  </export>
+</package>

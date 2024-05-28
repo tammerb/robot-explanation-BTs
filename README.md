@@ -1,37 +1,101 @@
 # Robot Explanation Generation Using Behavior Trees (BTs)
 
-This reposotory contains code and the behavior trees in XML for the following paper accepted to ACM Transactions on Human-Robot Interaction (THRI).
+This repository is a fork of the original project available at [uml-robotics/robot-explanation-BTs](https://github.com/uml-robotics/robot-explanation-BTs) and is associated with the paper, "What Will You Do Next? Extending Explanation Generation Using Behavior Trees to Include Projection-Level XAI."
 
- - Zhao Han, Daniel Giger, Jordan Allspaw, Michael S. Lee, Henny Admoni, and Holly A. Yanco. __Building The Foundation of Robot Explanation Generation Using Behavior Trees__.
+## Project Overview
 
-Everything other than the code is available at https://cs.uml.edu/~zhan/#re-bt.
+In the context of this paper, we have introduced an extension to [an existing codebase](https://github.com/ian-chuang/BehaviorTree.CPP) for generating explanations using behavior trees (BTs). Our contributions to this project include:
 
-## Code
+1. **Next Action Explanations**: We've created algorithms that allow users to ask about what an agent's next action will be in case of success or failure in their current action.
 
-`ExplainableBT.h` contains all the proposed algorithms, implemented in C++ using the [BehaviorTree.CPP](https://www.behaviortree.dev/) library. Please read the header comment for its usage.
+2. **Pre/Post-Condition Explanations**: The extended codebase allows users to pose questions regarding the preconditions and postconditions of the current action being executed.
 
- - It also depends on `BehaviorTracker.h`, which tracks the node currently ticking in order to generate explanations related to it.
+3. **Code Refactoring**: We've refactored the original explanation generation code to enhance its modularity, making it easier for future researchers to add new explanations.
 
-The `main_service` folder contains a ROS service package to answer the 5 questions mentioned in the paper as well as dynamic behavior insertion as subgoal.
+4. **Dependency Library Upgrade**: The project includes an updated version of the dependency library BehaviorTree.CPP, which is tailored to support our enhancements.
+
+5. **Graphical User Interface (GUI)**: To facilitate the exploration of explanation interface designs for future Human-Robot Interaction (HRI) studies, we've integrated a GUI. This GUI provides a simple means to iterate on the presentation of explanations.
+
+## System Requirements
+
+To use this codebase, please ensure that your system meets the following requirements:
+
+- **ROS Noetic**
+- **Ubuntu 20.04**
+
+Our code has been tested on WSL2 Ubuntu 20.04 with ROS Noetic.
+
+## Installation
+
+To install the necessary dependencies and set up your environment, follow these steps:
+
+1. Verify that you are running Ubuntu 20.04 and have ROS Noetic installed. You can find installation instructions for ROS Noetic [here](https://wiki.ros.org/noetic/Installation/Ubuntu).
+
+2. Install catkin the ROS build system:
+
+   ```bash
+   sudo apt install ros-noetic-catkin python3-catkin-tools
+   ```
+
+3. Create a ROS workspace. In your terminal, execute the following commands:
+
+   ```bash
+   mkdir -p ~/catkin_ws/src
+   cd ~/catkin_ws/src
+   ```
+
+4. Clone the required repositories:
+
+   ```bash
+   git clone -b v4.3 https://github.com/ian-chuang/BehaviorTree.CPP.git
+   git clone https://github.com/ian-chuang/robot-explanation-BTs.git
+   ```
+
+5. Install ROS dependencies for the cloned packages:
+
+   ```bash
+   cd ~/catkin_ws/src
+   rosdep install -y --from-paths . --ignore-src --rosdistro noetic
+   ```
+
+6. Build the project using Catkin:
+
+   ```bash
+   cd ~/catkin_ws
+   catkin build
+   ```
+
+7. Source the setup script to configure your environment:
+
+   ```bash
+   source ~/catkin_ws/devel/setup.bash
+   ```
+
+## Running the Project
+
+To run the example behavior tree, use the following command:
 
 ```bash
-rosservice call /explain "what: 'What are you doing?'"
-rosservice call /explain "what: 'Why are you doing this?'"
-rosservice call /explain "what: 'What is your goal?'"
-rosservice call /explain "what: 'How do you achieve your goal?'"
-rosservice call /explain "what: 'What is your subgoal?'"
-rosservice call /explain "what: 'How do you achieve your subgoal?'"
-
-rosservice call /explain "what: 'Can you place screw into caddy?'"
-rosservice call /explain "what: 'Can you pick screw?'"
+roslaunch explain_bt example_bt.launch
 ```
 
-## Behavior Trees in XML
+Once executed, the GUI will be displayed. Click the "Start" button at the top left of the GUI to begin the behavior tree execution. The GUI will provide real-time generated explanations while the behavior tree is running. If needed, you can restart the behavior tree by clicking "Reset" and "Start."
 
-`kitting-tree.xml` contains the tree of the meta kitting task, including the 3 tasks mentioned in the paper:
+Feel free to explore and experiment with the behavior tree located at `explain_bt/bt_xml/example_bt.xml`.
 
-1. go pick screw
-2. go place screw
-3. go insert large gear
+## Algorithms
 
-`taxi-domain-tree.xml` contains the tree for the optimal policy of the Taxi domain.
+<p align="center">
+  <img src="images/algorithm1.png" width="300"  alt="Algorithm 1">
+  <img src="images/algorithm2.png" width="300"  alt="Algorithm 4">
+</p>
+
+<p align="center">
+  <img src="images/algorithm3.png" width="300"  alt="Algorithm 2">
+  <img src="images/algorithm4.png" width="300"  alt="Algorithm 5">
+</p>
+
+<p align="center">
+  <img src="images/algorithm5.png" width="300"  alt="Algorithm 3">
+  <img src="images/algorithm6.png" width="300"  alt="Algorithm 6">
+</p>

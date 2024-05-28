@@ -1,0 +1,10 @@
+<launch>
+    <arg name="bt" default="$(find explain_bt)/bt_xml/example_bt.xml"/>
+
+    <!-- explainable behavior tree -->
+    <param name="behavior_tree_xml" value="$(arg bt)"/>
+    <node pkg="explain_bt" type="example_bt" name="example_bt" output="screen"/>
+
+     <!-- gui -->
+    <node name="rqt_gui" pkg="rqt_gui" type="rqt_gui" args="--perspective-file $(find explain_bt)/etc/default.perspective" output="screen"/>
+</launch>

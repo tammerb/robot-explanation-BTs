@@ -1,8 +1,0 @@
-- git:
-    local-name: BehaviorTree.CPP
-    uri: https://github.com/tammerb/BehaviorTree.CPP.git
-    version: master
-- git:
-    local-name: robot-explanation-BTs
-    uri: https://github.com/tammerb/robot-explanation-BTs.git
-    version: main

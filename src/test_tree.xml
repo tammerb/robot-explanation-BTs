@@ -1,9 +1,0 @@
- <root main_tree_to_execute = "MainTree" >
-     <BehaviorTree ID="MainTree">
-        <Sequence name="do_basic_manipulation">
-            <CloseGripper   name="close_gripper"/>
-            <Pick         name="pick"/>
-            <GoHome         name="go_home"/>
-        </Sequence>
-     </BehaviorTree>
- </root>

@@ -1,0 +1,15 @@
+<root BTCPP_format="4" main_tree_to_execute="MainTree">
+
+    <BehaviorTree ID="MainTree">
+        <RetryUntilSuccessful num_attempts="3" name="repeat">
+            <Explain name="oops I failed">
+                <DummyAction
+                    name="action"
+                    succeed="false"
+                    msec="1000"
+                />
+            </Explain>
+        </RetryUntilSuccessful>
+    </BehaviorTree>
+
+</root>

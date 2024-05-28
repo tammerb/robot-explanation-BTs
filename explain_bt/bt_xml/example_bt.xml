@@ -1,0 +1,24 @@
+<root BTCPP_format="4" main_tree_to_execute="MainTree">
+
+
+    <BehaviorTree ID="MainTree">
+        <Sequence name="replace battery">
+            <SubTree ID="OpenCover" name="open battery cover" item="battery" />
+            <DummyAction name="remove old battery" succeed="true" msec="3000" />
+            <DummyAction name="insert new battery" succeed="true" msec="3000" />
+        </Sequence>
+    </BehaviorTree>
+
+    <BehaviorTree ID="OpenCover">
+        <Sequence name="open {item} cover">
+            <Script code="cover_is_open:=false" name="get {item} cover state"/>
+            <DummyAction 
+                name="lift {item} cover"
+                succeed="true" 
+                msec="3000" 
+                _skipIf="cover_is_open"
+            />
+        </Sequence>
+    </BehaviorTree>
+
+</root>
